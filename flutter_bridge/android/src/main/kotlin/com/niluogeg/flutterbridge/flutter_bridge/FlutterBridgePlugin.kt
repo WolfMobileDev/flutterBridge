@@ -21,6 +21,10 @@ class FlutterBridgePlugin: FlutterPlugin, Message.NativeRouterApi {
     Message.NativeRouterApi.setup(flutterPluginBinding.binaryMessenger,this)
   }
 
+  override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+
+  }
+
   override fun pushNativeRoute(arg: Message.CommonParams?) {
     Log.e("FlutterBridgePlugin","pushNativeRoute=${arg.toString()}")
   }
