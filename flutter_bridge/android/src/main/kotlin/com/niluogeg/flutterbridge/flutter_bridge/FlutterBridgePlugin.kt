@@ -1,5 +1,7 @@
 package com.niluogeg.flutterbridge.flutter_bridge
 
+import Message.NativeRouterApi.setup
+import android.util.Log
 import androidx.annotation.NonNull
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -10,7 +12,7 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
 /** FlutterBridgePlugin */
-class FlutterBridgePlugin: FlutterPlugin, MethodCallHandler {
+class FlutterBridgePlugin: FlutterPlugin, MethodCallHandler, Message.NativeRouterApi {
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -18,19 +20,15 @@ class FlutterBridgePlugin: FlutterPlugin, MethodCallHandler {
   private lateinit var channel : MethodChannel
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_bridge")
-    channel.setMethodCallHandler(this)
+    Message.NativeRouterApi.setup(flutterPluginBinding.binaryMessenger,this)
   }
 
-  override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    if (call.method == "getPlatformVersion") {
-      result.success("Android ${android.os.Build.VERSION.RELEASE}")
-    } else {
-      result.notImplemented()
-    }
+  override fun pushNativeRoute(arg: Message.CommonParams?) {
+    Log.e("FlutterBridgePlugin","pushNativeRoute=${arg.toString()}")
   }
 
-  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-    channel.setMethodCallHandler(null)
+  override fun saveStackToHost(arg: Message.StackInfo?) {
+    Log.e("FlutterBridgePlugin","saveStackToHost=${arg.toString()}")
   }
+
 }
