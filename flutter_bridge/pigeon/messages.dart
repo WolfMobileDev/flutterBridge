@@ -41,4 +41,5 @@ void configurePigeon(PigeonOptions opts) {
   opts.objcOptions.prefix = 'FB';
   opts.javaOut =
       'android/src/main/kotlin/com/niluogeg/flutterbridge/flutter_bridge/Message.java';
+  opts.javaOptions.package="com.niluogeg.flutterbridge.flutter_bridge";
 }
