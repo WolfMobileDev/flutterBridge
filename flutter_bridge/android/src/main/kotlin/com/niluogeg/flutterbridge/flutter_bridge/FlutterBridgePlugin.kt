@@ -1,6 +1,5 @@
 package com.niluogeg.flutterbridge.flutter_bridge
 
-import Message.NativeRouterApi.setup
 import android.util.Log
 import androidx.annotation.NonNull
 
