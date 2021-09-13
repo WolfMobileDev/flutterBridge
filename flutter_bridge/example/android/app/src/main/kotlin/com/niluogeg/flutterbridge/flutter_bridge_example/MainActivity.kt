@@ -14,32 +14,8 @@ import io.flutter.embedding.engine.FlutterEngine
 class MainActivity : FlutterActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        findViewById<View>(R.id.btn).setOnClickListener {
-
-            val fb = getPlugin(flutterEngine);
-            val params = Message.CallInfo()
-            params.methodName = "dffadsf"
-            fb?.flutterApi?.pushRoute(
-                params
-            ) { Log.e("MainActivity", "调用flutter 方法回调 $it") }
-        }
     }
 
-    /**
-     * 通过 FlutterEngine获取到 FlutterBridgePlugin （flutter bridge 的 插件）
-     */
-    fun getPlugin(engine: FlutterEngine?): FlutterBridgePlugin? {
-        if (engine != null) {
-            try {
-                val pluginClass =
-                    Class.forName("com.niluogeg.flutterbridge.flutter_bridge.FlutterBridgePlugin") as Class<out FlutterBridgePlugin?>
-                return engine.plugins[pluginClass] as FlutterBridgePlugin?
-            } catch (t: Throwable) {
-                t.printStackTrace()
-            }
-        }
-        return null
-    }
+
 }
