@@ -21,13 +21,13 @@ class StackInfo {
 
 @HostApi()
 abstract class NativeRouterApi {
-  void pushNativeRoute(CommonParams param);
+  CommonParams pushNativeRoute(CommonParams param);
   void saveStackToHost(StackInfo stack);
 }
 
 @FlutterApi()
 abstract class FlutterRouterApi {
-  void pushRoute(CommonParams param);
+  CommonParams pushRoute(CommonParams param);
   void popRoute(CommonParams param);
 }
 

@@ -92,14 +92,16 @@ static NSDictionary<NSString*, id>* wrapResult(NSDictionary *result, FlutterErro
   return self;
 }
 
-- (void)pushRoute:(FBCommonParams*)input completion:(void(^)(NSError* _Nullable))completion {
+- (void)pushRoute:(FBCommonParams*)input completion:(void(^)(FBCommonParams*, NSError* _Nullable))completion {
   FlutterBasicMessageChannel *channel =
     [FlutterBasicMessageChannel
       messageChannelWithName:@"dev.flutter.pigeon.FlutterRouterApi.pushRoute"
       binaryMessenger:self.binaryMessenger];
   NSDictionary* inputMap = [input toMap];
   [channel sendMessage:inputMap reply:^(id reply) {
-    completion(nil);
+    NSDictionary* outputMap = reply;
+    FBCommonParams * output = [FBCommonParams fromMap:outputMap];
+    completion(output, nil);
   }];
 }
 - (void)popRoute:(FBCommonParams*)input completion:(void(^)(NSError* _Nullable))completion {
@@ -123,8 +125,8 @@ void FBNativeRouterApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<FBNat
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         FBCommonParams *input = [FBCommonParams fromMap:message];
         FlutterError *error;
-        [api pushNativeRoute:input error:&error];
-        callback(wrapResult(nil, error));
+        FBCommonParams *output = [api pushNativeRoute:input error:&error];
+        callback(wrapResult([output toMap], error));
       }];
     }
     else {

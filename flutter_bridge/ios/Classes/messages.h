@@ -25,11 +25,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface FBFlutterRouterApi : NSObject
 - (instancetype)initWithBinaryMessenger:(id<FlutterBinaryMessenger>)binaryMessenger;
-- (void)pushRoute:(FBCommonParams*)input completion:(void(^)(NSError* _Nullable))completion;
+- (void)pushRoute:(FBCommonParams*)input completion:(void(^)(FBCommonParams*, NSError* _Nullable))completion;
 - (void)popRoute:(FBCommonParams*)input completion:(void(^)(NSError* _Nullable))completion;
 @end
 @protocol FBNativeRouterApi
--(void)pushNativeRoute:(FBCommonParams*)input error:(FlutterError *_Nullable *_Nonnull)error;
+-(nullable FBCommonParams *)pushNativeRoute:(FBCommonParams*)input error:(FlutterError *_Nullable *_Nonnull)error;
 -(void)saveStackToHost:(FBStackInfo*)input error:(FlutterError *_Nullable *_Nonnull)error;
 @end
 

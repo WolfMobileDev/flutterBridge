@@ -28,9 +28,14 @@ class FlutterBridgePlugin: FlutterPlugin, Message.NativeRouterApi {
 
   }
 
-  override fun pushNativeRoute(arg: Message.CommonParams?) {
+  override fun pushNativeRoute(arg: Message.CommonParams?): Message.CommonParams {
+
     Log.e("FlutterBridgePlugin","pushNativeRoute=${arg.toString()}")
+    val cp = Message.CommonParams();
+    cp.pageName = "FlutterBridgePlugin pushNativeRoute";
+    return  cp
   }
+
 
   override fun saveStackToHost(arg: Message.StackInfo?) {
     Log.e("FlutterBridgePlugin","saveStackToHost=${arg.toString()}")

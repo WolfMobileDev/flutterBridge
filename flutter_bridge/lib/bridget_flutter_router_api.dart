@@ -19,7 +19,10 @@ class BridgetFlutterRouterApi extends FlutterRouterApi {
   }
 
   @override
-  void pushRoute(CommonParams arg) {
-    print('BridgetFlutterRouterApi pushRoute arg =${arg.toString()}');
+  CommonParams pushRoute(CommonParams arg) {
+    print('BridgetFlutterRouterApi popRoute arg =${arg.toString()}');
+    var cp = CommonParams();
+    cp.pageName = "BridgetFlutterRouterApi pushRoute";
+    return cp;
   }
 }

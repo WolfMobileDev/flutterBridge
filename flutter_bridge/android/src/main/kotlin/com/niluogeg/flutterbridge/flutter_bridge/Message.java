@@ -96,12 +96,15 @@ public class Message {
     public interface Reply<T> {
       void reply(T reply);
     }
-    public void pushRoute(CommonParams argInput, Reply<Void> callback) {
+    public void pushRoute(CommonParams argInput, Reply<CommonParams> callback) {
       BasicMessageChannel<Object> channel =
           new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.FlutterRouterApi.pushRoute", new StandardMessageCodec());
       Map<String, Object> inputMap = argInput.toMap();
       channel.send(inputMap, channelReply -> {
-        callback.reply(null);
+        Map outputMap = (Map)channelReply;
+        @SuppressWarnings("ConstantConditions")
+        CommonParams output = CommonParams.fromMap(outputMap);
+        callback.reply(output);
       });
     }
     public void popRoute(CommonParams argInput, Reply<Void> callback) {
@@ -116,7 +119,7 @@ public class Message {
 
   /** Generated interface from Pigeon that represents a handler of messages from Flutter.*/
   public interface NativeRouterApi {
-    void pushNativeRoute(CommonParams arg);
+    CommonParams pushNativeRoute(CommonParams arg);
     void saveStackToHost(StackInfo arg);
 
     /** Sets up an instance of `NativeRouterApi` to handle messages through the `binaryMessenger`. */
@@ -130,8 +133,8 @@ public class Message {
             try {
               @SuppressWarnings("ConstantConditions")
               CommonParams input = CommonParams.fromMap((Map<String, Object>)message);
-              api.pushNativeRoute(input);
-              wrapped.put("result", null);
+              CommonParams output = api.pushNativeRoute(input);
+              wrapped.put("result", output.toMap());
             }
             catch (Error | RuntimeException exception) {
               wrapped.put("error", wrapError(exception));

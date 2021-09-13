@@ -23,9 +23,7 @@ class MainActivity : FlutterActivity() {
             params.key = "dffadsf"
             fb?.flutterApi?.pushRoute(
                 params
-            ) {
-                Log.e("MainActivity", "调用flutter 方法回调 $it")
-            }
+            ) { Log.e("MainActivity", "调用flutter 方法回调 $it") }
         }
     }
 

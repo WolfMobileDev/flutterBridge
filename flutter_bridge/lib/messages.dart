@@ -55,7 +55,7 @@ class StackInfo {
 }
 
 abstract class FlutterRouterApi {
-  void pushRoute(CommonParams arg);
+  CommonParams pushRoute(CommonParams arg);
   void popRoute(CommonParams arg);
   static void setup(FlutterRouterApi api) {
     {
@@ -67,8 +67,8 @@ abstract class FlutterRouterApi {
         channel.setMessageHandler((Object message) async {
           assert(message != null, 'Argument for dev.flutter.pigeon.FlutterRouterApi.pushRoute was null. Expected CommonParams.');
           final CommonParams input = CommonParams.decode(message);
-          api.pushRoute(input);
-          return;
+          final CommonParams output = api.pushRoute(input);
+          return output.encode();
         });
       }
     }
@@ -90,7 +90,7 @@ abstract class FlutterRouterApi {
 }
 
 class NativeRouterApi {
-  Future<void> pushNativeRoute(CommonParams arg) async {
+  Future<CommonParams> pushNativeRoute(CommonParams arg) async {
     final Object encoded = arg.encode();
     const BasicMessageChannel<Object> channel =
         BasicMessageChannel<Object>('dev.flutter.pigeon.NativeRouterApi.pushNativeRoute', StandardMessageCodec());
@@ -109,7 +109,7 @@ class NativeRouterApi {
         details: error['details'],
       );
     } else {
-      // noop
+      return CommonParams.decode(replyMap['result']);
     }
   }
 
