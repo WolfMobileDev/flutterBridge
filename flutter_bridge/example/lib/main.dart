@@ -36,9 +36,9 @@ class _MyAppState extends State<MyApp> {
           children: [
             MaterialButton(
               onPressed: () async {
-                CommonParams cp = CommonParams();
-                cp.pageName = "hhhh";
-                CommonParams cpResult =   await NativeRouterApi().pushNativeRoute(cp);
+                CallInfo cp = CallInfo();
+                cp.methodName = "hhhh";
+                ResultInfo cpResult =   await NativeRouterApi().pushNativeRoute(cp);
                 print('flutter 调用原生 回调 cpResult=${cpResult.toString()}');
               },
               child: Text("通过 flutter_bridge 调用方法"),

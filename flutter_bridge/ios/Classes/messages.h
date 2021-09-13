@@ -7,15 +7,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class FBCommonParams;
+@class FBResultInfo;
+@class FBCallInfo;
 @class FBStackInfo;
 
-@interface FBCommonParams : NSObject
-@property(nonatomic, copy, nullable) NSString * pageName;
-@property(nonatomic, copy, nullable) NSString * uniqueId;
-@property(nonatomic, strong, nullable) NSDictionary * arguments;
-@property(nonatomic, strong, nullable) NSNumber * opaque;
-@property(nonatomic, copy, nullable) NSString * key;
+@interface FBResultInfo : NSObject
+@property(nonatomic, copy, nullable) NSString * result;
+@end
+
+@interface FBCallInfo : NSObject
+@property(nonatomic, copy, nullable) NSString * methodName;
+@property(nonatomic, strong, nullable) NSDictionary * params;
 @end
 
 @interface FBStackInfo : NSObject
@@ -25,11 +27,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface FBFlutterRouterApi : NSObject
 - (instancetype)initWithBinaryMessenger:(id<FlutterBinaryMessenger>)binaryMessenger;
-- (void)pushRoute:(FBCommonParams*)input completion:(void(^)(FBCommonParams*, NSError* _Nullable))completion;
-- (void)popRoute:(FBCommonParams*)input completion:(void(^)(NSError* _Nullable))completion;
+- (void)send:(FBCallInfo*)input completion:(void(^)(FBResultInfo*, NSError* _Nullable))completion;
+- (void)registerHandler:(FBCallInfo*)input completion:(void(^)(FBResultInfo*, NSError* _Nullable))completion;
+- (void)pushRoute:(FBCallInfo*)input completion:(void(^)(FBResultInfo*, NSError* _Nullable))completion;
+- (void)popRoute:(FBCallInfo*)input completion:(void(^)(NSError* _Nullable))completion;
 @end
 @protocol FBNativeRouterApi
--(nullable FBCommonParams *)pushNativeRoute:(FBCommonParams*)input error:(FlutterError *_Nullable *_Nonnull)error;
+-(nullable FBResultInfo *)send:(FBCallInfo*)input error:(FlutterError *_Nullable *_Nonnull)error;
+-(nullable FBResultInfo *)registerHandler:(FBCallInfo*)input error:(FlutterError *_Nullable *_Nonnull)error;
+-(nullable FBResultInfo *)pushNativeRoute:(FBCallInfo*)input error:(FlutterError *_Nullable *_Nonnull)error;
 -(void)saveStackToHost:(FBStackInfo*)input error:(FlutterError *_Nullable *_Nonnull)error;
 @end
 

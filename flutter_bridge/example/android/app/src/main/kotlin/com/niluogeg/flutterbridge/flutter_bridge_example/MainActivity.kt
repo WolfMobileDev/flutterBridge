@@ -19,8 +19,8 @@ class MainActivity : FlutterActivity() {
         findViewById<View>(R.id.btn).setOnClickListener {
 
             val fb = getPlugin(flutterEngine);
-            val params = Message.CommonParams()
-            params.key = "dffadsf"
+            val params = Message.CallInfo()
+            params.methodName = "dffadsf"
             fb?.flutterApi?.pushRoute(
                 params
             ) { Log.e("MainActivity", "调用flutter 方法回调 $it") }

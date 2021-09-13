@@ -28,11 +28,25 @@ class FlutterBridgePlugin: FlutterPlugin, Message.NativeRouterApi {
 
   }
 
-  override fun pushNativeRoute(arg: Message.CommonParams?): Message.CommonParams {
+  override fun send(arg: Message.CallInfo?): Message.ResultInfo {
+    Log.e("FlutterBridgePlugin","send=${arg.toString()}")
+    val cp = Message.ResultInfo();
+    cp.result = "FlutterBridgePlugin send";
+    return  cp
+  }
+
+  override fun registerHandler(arg: Message.CallInfo?): Message.ResultInfo {
+    Log.e("FlutterBridgePlugin","registerHandler=${arg.toString()}")
+    val cp = Message.ResultInfo();
+    cp.result = "FlutterBridgePlugin registerHandler";
+    return  cp
+  }
+
+  override fun pushNativeRoute(arg: Message.CallInfo?): Message.ResultInfo {
 
     Log.e("FlutterBridgePlugin","pushNativeRoute=${arg.toString()}")
-    val cp = Message.CommonParams();
-    cp.pageName = "FlutterBridgePlugin pushNativeRoute";
+    val cp = Message.ResultInfo();
+    cp.result = "FlutterBridgePlugin pushNativeRoute";
     return  cp
   }
 

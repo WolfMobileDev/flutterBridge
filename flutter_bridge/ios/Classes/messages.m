@@ -22,8 +22,12 @@ static NSDictionary<NSString*, id>* wrapResult(NSDictionary *result, FlutterErro
       };
 }
 
-@interface FBCommonParams ()
-+(FBCommonParams*)fromMap:(NSDictionary*)dict;
+@interface FBResultInfo ()
++(FBResultInfo*)fromMap:(NSDictionary*)dict;
+-(NSDictionary*)toMap;
+@end
+@interface FBCallInfo ()
++(FBCallInfo*)fromMap:(NSDictionary*)dict;
 -(NSDictionary*)toMap;
 @end
 @interface FBStackInfo ()
@@ -31,33 +35,35 @@ static NSDictionary<NSString*, id>* wrapResult(NSDictionary *result, FlutterErro
 -(NSDictionary*)toMap;
 @end
 
-@implementation FBCommonParams
-+(FBCommonParams*)fromMap:(NSDictionary*)dict {
-  FBCommonParams* result = [[FBCommonParams alloc] init];
-  result.pageName = dict[@"pageName"];
-  if ((NSNull *)result.pageName == [NSNull null]) {
-    result.pageName = nil;
-  }
-  result.uniqueId = dict[@"uniqueId"];
-  if ((NSNull *)result.uniqueId == [NSNull null]) {
-    result.uniqueId = nil;
-  }
-  result.arguments = dict[@"arguments"];
-  if ((NSNull *)result.arguments == [NSNull null]) {
-    result.arguments = nil;
-  }
-  result.opaque = dict[@"opaque"];
-  if ((NSNull *)result.opaque == [NSNull null]) {
-    result.opaque = nil;
-  }
-  result.key = dict[@"key"];
-  if ((NSNull *)result.key == [NSNull null]) {
-    result.key = nil;
+@implementation FBResultInfo
++(FBResultInfo*)fromMap:(NSDictionary*)dict {
+  FBResultInfo* result = [[FBResultInfo alloc] init];
+  result.result = dict[@"result"];
+  if ((NSNull *)result.result == [NSNull null]) {
+    result.result = nil;
   }
   return result;
 }
 -(NSDictionary*)toMap {
-  return [NSDictionary dictionaryWithObjectsAndKeys:(self.pageName ? self.pageName : [NSNull null]), @"pageName", (self.uniqueId ? self.uniqueId : [NSNull null]), @"uniqueId", (self.arguments ? self.arguments : [NSNull null]), @"arguments", (self.opaque ? self.opaque : [NSNull null]), @"opaque", (self.key ? self.key : [NSNull null]), @"key", nil];
+  return [NSDictionary dictionaryWithObjectsAndKeys:(self.result ? self.result : [NSNull null]), @"result", nil];
+}
+@end
+
+@implementation FBCallInfo
++(FBCallInfo*)fromMap:(NSDictionary*)dict {
+  FBCallInfo* result = [[FBCallInfo alloc] init];
+  result.methodName = dict[@"methodName"];
+  if ((NSNull *)result.methodName == [NSNull null]) {
+    result.methodName = nil;
+  }
+  result.params = dict[@"params"];
+  if ((NSNull *)result.params == [NSNull null]) {
+    result.params = nil;
+  }
+  return result;
+}
+-(NSDictionary*)toMap {
+  return [NSDictionary dictionaryWithObjectsAndKeys:(self.methodName ? self.methodName : [NSNull null]), @"methodName", (self.params ? self.params : [NSNull null]), @"params", nil];
 }
 @end
 
@@ -92,7 +98,31 @@ static NSDictionary<NSString*, id>* wrapResult(NSDictionary *result, FlutterErro
   return self;
 }
 
-- (void)pushRoute:(FBCommonParams*)input completion:(void(^)(FBCommonParams*, NSError* _Nullable))completion {
+- (void)send:(FBCallInfo*)input completion:(void(^)(FBResultInfo*, NSError* _Nullable))completion {
+  FlutterBasicMessageChannel *channel =
+    [FlutterBasicMessageChannel
+      messageChannelWithName:@"dev.flutter.pigeon.FlutterRouterApi.send"
+      binaryMessenger:self.binaryMessenger];
+  NSDictionary* inputMap = [input toMap];
+  [channel sendMessage:inputMap reply:^(id reply) {
+    NSDictionary* outputMap = reply;
+    FBResultInfo * output = [FBResultInfo fromMap:outputMap];
+    completion(output, nil);
+  }];
+}
+- (void)registerHandler:(FBCallInfo*)input completion:(void(^)(FBResultInfo*, NSError* _Nullable))completion {
+  FlutterBasicMessageChannel *channel =
+    [FlutterBasicMessageChannel
+      messageChannelWithName:@"dev.flutter.pigeon.FlutterRouterApi.registerHandler"
+      binaryMessenger:self.binaryMessenger];
+  NSDictionary* inputMap = [input toMap];
+  [channel sendMessage:inputMap reply:^(id reply) {
+    NSDictionary* outputMap = reply;
+    FBResultInfo * output = [FBResultInfo fromMap:outputMap];
+    completion(output, nil);
+  }];
+}
+- (void)pushRoute:(FBCallInfo*)input completion:(void(^)(FBResultInfo*, NSError* _Nullable))completion {
   FlutterBasicMessageChannel *channel =
     [FlutterBasicMessageChannel
       messageChannelWithName:@"dev.flutter.pigeon.FlutterRouterApi.pushRoute"
@@ -100,11 +130,11 @@ static NSDictionary<NSString*, id>* wrapResult(NSDictionary *result, FlutterErro
   NSDictionary* inputMap = [input toMap];
   [channel sendMessage:inputMap reply:^(id reply) {
     NSDictionary* outputMap = reply;
-    FBCommonParams * output = [FBCommonParams fromMap:outputMap];
+    FBResultInfo * output = [FBResultInfo fromMap:outputMap];
     completion(output, nil);
   }];
 }
-- (void)popRoute:(FBCommonParams*)input completion:(void(^)(NSError* _Nullable))completion {
+- (void)popRoute:(FBCallInfo*)input completion:(void(^)(NSError* _Nullable))completion {
   FlutterBasicMessageChannel *channel =
     [FlutterBasicMessageChannel
       messageChannelWithName:@"dev.flutter.pigeon.FlutterRouterApi.popRoute"
@@ -119,13 +149,47 @@ void FBNativeRouterApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<FBNat
   {
     FlutterBasicMessageChannel *channel =
       [FlutterBasicMessageChannel
+        messageChannelWithName:@"dev.flutter.pigeon.NativeRouterApi.send"
+        binaryMessenger:binaryMessenger];
+    if (api) {
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        FBCallInfo *input = [FBCallInfo fromMap:message];
+        FlutterError *error;
+        FBResultInfo *output = [api send:input error:&error];
+        callback(wrapResult([output toMap], error));
+      }];
+    }
+    else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [FlutterBasicMessageChannel
+        messageChannelWithName:@"dev.flutter.pigeon.NativeRouterApi.registerHandler"
+        binaryMessenger:binaryMessenger];
+    if (api) {
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        FBCallInfo *input = [FBCallInfo fromMap:message];
+        FlutterError *error;
+        FBResultInfo *output = [api registerHandler:input error:&error];
+        callback(wrapResult([output toMap], error));
+      }];
+    }
+    else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [FlutterBasicMessageChannel
         messageChannelWithName:@"dev.flutter.pigeon.NativeRouterApi.pushNativeRoute"
         binaryMessenger:binaryMessenger];
     if (api) {
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
-        FBCommonParams *input = [FBCommonParams fromMap:message];
+        FBCallInfo *input = [FBCallInfo fromMap:message];
         FlutterError *error;
-        FBCommonParams *output = [api pushNativeRoute:input error:&error];
+        FBResultInfo *output = [api pushNativeRoute:input error:&error];
         callback(wrapResult([output toMap], error));
       }];
     }
