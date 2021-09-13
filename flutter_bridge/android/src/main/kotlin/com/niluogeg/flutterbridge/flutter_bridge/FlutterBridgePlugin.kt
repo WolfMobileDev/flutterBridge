@@ -12,6 +12,8 @@ import io.flutter.plugin.common.PluginRegistry.Registrar
 
 /** FlutterBridgePlugin */
 class FlutterBridgePlugin: FlutterPlugin, Message.NativeRouterApi {
+  lateinit var flutterApi : Message.FlutterRouterApi
+
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -19,6 +21,7 @@ class FlutterBridgePlugin: FlutterPlugin, Message.NativeRouterApi {
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     Message.NativeRouterApi.setup(flutterPluginBinding.binaryMessenger,this)
+    flutterApi=  Message.FlutterRouterApi(flutterPluginBinding.binaryMessenger)
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
