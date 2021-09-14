@@ -23,7 +23,7 @@ class FlutterBridge extends FlutterRouterApi {
     _methodMap[methodName] = methodHandle;
   }
 
-  Future<String> callNative(String methodName, Map<String, Object> params) async {
+  Future<String> callNative(String methodName, {Map<String, Object> params}) async {
     CallInfo cp = CallInfo();
     cp.methodName = methodName;
     cp.params = params;

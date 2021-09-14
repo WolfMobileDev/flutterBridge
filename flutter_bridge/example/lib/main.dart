@@ -18,14 +18,13 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-
-  _registMethod(){
-    FlutterBridge.instance.registerHandler("nativeCallFlutter",(params)  {
+  _registMethod() {
+    FlutterBridge.instance.registerHandler("nativeCallFlutter", (params) {
       print('flutter 收到 原生 的调用 params${params.toString()}');
-      return"flutter 收到 native 的调用";
+      return "flutter 收到 native 的调用";
     });
 
-    FlutterBridge.instance.registerHandler("nativeCallFlutter2",(params)  {
+    FlutterBridge.instance.registerHandler("nativeCallFlutter2", (params) {
       print('flutter 收到 原生的调用 params${params.toString()}');
       return "flutter 收到 native 的调用";
     });
@@ -42,18 +41,26 @@ class _MyAppState extends State<MyApp> {
           children: [
             MaterialButton(
               onPressed: () async {
-                var result = await FlutterBridge.instance.callNative("flutterCallNative",
-                    {"pageName": "com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"});
-                print('flutter 调用原生 返回值 cpResult=$result');
-              },
-              child: Text("通过 flutter_bridge 调用方法 flutterCallNative"),
-            ),
-            MaterialButton(
-              onPressed: () async {
-                var result = await FlutterBridge.instance.callNative("startEnterActivity", {"pageName": "com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"});
+                var result = await FlutterBridge.instance.callNative("startEnterActivity",
+                    params: {"pageName": "com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"});
                 print('flutter 调用原生 返回值 cpResult=$result');
               },
               child: Text("startEnterActivity"),
+            ),
+            MaterialButton(
+              onPressed: () async {
+                var result = await FlutterBridge.instance.callNative("getSDKVersion");
+                print('sdk version =$result');
+              },
+              child: Text("getSDKVersion"),
+            ),
+
+            MaterialButton(
+              onPressed: () async {
+                var result = await FlutterBridge.instance.callNative("getSDKVersionaa");
+                print('sdk version =$result');
+              },
+              child: Text("异步方法"),
             ),
           ],
         ),

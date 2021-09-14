@@ -1,8 +1,8 @@
 package com.niluogeg.flutterbridge.flutter_bridge_example
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import com.niluogeg.flutterbridge.flutter_bridge.FlutterBridge
 import com.niluogeg.flutterbridge.flutter_bridge.MethodHandler
 import io.flutter.embedding.android.FlutterActivity
@@ -13,10 +13,9 @@ class MainActivity : FlutterActivity() {
         super.onCreate(savedInstanceState)
 
 
-        FlutterBridge.instance.registerHandler("flutterCallNative",object : MethodHandler {
+        FlutterBridge.instance.registerHandler("getSDKVersion",object : MethodHandler {
             override fun onMethodCall(params: Map<String, Any?>): String {
-                Log.e("flutterCallNative", "native 收到 flutter 的调用 params${params.toString()}")
-                return "native 收到 flutter 的调用"
+                return Build.VERSION.SDK_INT.toString()
             }
         })
 
