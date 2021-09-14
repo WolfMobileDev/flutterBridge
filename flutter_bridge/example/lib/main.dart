@@ -37,20 +37,33 @@ class _MyAppState extends State<MyApp> {
             MaterialButton(
               onPressed: () async {
                 // CallInfo cp = CallInfo();
-                // cp.methodName = "hhhh";
-                // ResultInfo cpResult =   await NativeRouterApi().pushNativeRoute(cp);
+                // cp.methodName = "startNativePage";
+                // cp.params={"pageName":"com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"};
+                // ResultInfo cpResult =   await NativeRouterApi().call(cp);
                 // print('flutter 调用原生 回调 cpResult=${cpResult.toString()}');
               },
-              child: Text("通过 flutter_bridge 调用方法"),
-            ),  MaterialButton(
+              child: Text("打开原生页面"),
+            ),
+            MaterialButton(
               onPressed: () async {
                 CallInfo cp = CallInfo();
-                cp.methodName = "startNativePage";
-                cp.params={"pageName":"com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"};
-                ResultInfo cpResult =   await NativeRouterApi().call(cp);
+                cp.methodName = "flutterCallNative";
+                cp.params = {"pageName": "com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"};
+                ResultInfo cpResult = await NativeRouterApi().call(cp);
                 print('flutter 调用原生 回调 cpResult=${cpResult.toString()}');
               },
-              child: Text("打开原生页面"),
+              child: Text("通过 flutter_bridge 调用方法 flutterCallNative"),
+            ),
+
+            MaterialButton(
+              onPressed: () async {
+                CallInfo cp = CallInfo();
+                cp.methodName = "flutterCallNative2";
+                cp.params = {"aa": "bbb"};
+                ResultInfo cpResult = await NativeRouterApi().call(cp);
+                print('flutter 调用原生 回调 cpResult=${cpResult.toString()}');
+              },
+              child: Text("通过 flutter_bridge 调用方法 flutterCallNative2"),
             ),
           ],
         ),

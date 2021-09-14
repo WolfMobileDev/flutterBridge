@@ -1,5 +1,6 @@
 package com.niluogeg.flutterbridge.flutter_bridge
 
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.annotation.NonNull
@@ -8,8 +9,9 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin
 
 /** FlutterBridgePlugin */
 class FlutterBridgePlugin : FlutterPlugin, Message.NativeRouterApi {
-    lateinit var flutterApi: Message.FlutterRouterApi
-    lateinit var applicationContext: android.content.Context
+    private lateinit var flutterApi: Message.FlutterRouterApi
+    private lateinit var applicationContext: Context
+    private lateinit var flutterBridge: FlutterBridge
     /// The MethodChannel that will the communication between Flutter and native Android
     ///
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -17,6 +19,7 @@ class FlutterBridgePlugin : FlutterPlugin, Message.NativeRouterApi {
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         applicationContext = flutterPluginBinding.applicationContext
+        flutterBridge = FlutterBridge.instance
         Message.NativeRouterApi.setup(flutterPluginBinding.binaryMessenger, this)
         flutterApi = Message.FlutterRouterApi(flutterPluginBinding.binaryMessenger)
     }
@@ -25,27 +28,15 @@ class FlutterBridgePlugin : FlutterPlugin, Message.NativeRouterApi {
 
     }
 
-    override fun call(arg: Message.CallInfo?): Message.ResultInfo {
-        Log.e("FlutterBridgePlugin", "send=${arg?.params.toString()}")
-        val pageName = (arg?.params?.get("pageName") as String?) ?: ""
 
-        Log.e("FlutterBridgePlugin", "pageName=${pageName}")
-
-        var intent = Intent(applicationContext, Class.forName(pageName))
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        applicationContext.startActivity(intent)
-        val cp = Message.ResultInfo();
-        cp.result = "FlutterBridgePlugin send";
-        return cp
+    override fun call(callInfo: Message.CallInfo?): Message.ResultInfo {
+        val methodMame = callInfo?.methodName ?: ""
+        val params = (callInfo?.params ?: HashMap<String, Any?>()) as Map<String, Any?>
+        val result = flutterBridge.call(methodMame, params)
+        val ri = Message.ResultInfo()
+        ri.result = result
+        return ri
     }
-
-     fun registerHandler(arg: Message.CallInfo?): Message.ResultInfo {
-        Log.e("FlutterBridgePlugin", "registerHandler=${arg.toString()}")
-        val cp = Message.ResultInfo();
-        cp.result = "FlutterBridgePlugin registerHandler";
-        return cp
-    }
-
 
 
 }
