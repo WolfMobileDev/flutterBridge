@@ -46,22 +46,16 @@ class _MyAppState extends State<MyApp> {
             ),
             MaterialButton(
               onPressed: () async {
-                CallInfo cp = CallInfo();
-                cp.methodName = "flutterCallNative";
-                cp.params = {"pageName": "com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"};
-                ResultInfo cpResult = await NativeRouterApi().call(cp);
-                print('flutter 调用原生 回调 cpResult=${cpResult.toString()}');
+                var result = await FlutterBridge.instance.call("flutterCallNative",
+                    {"pageName": "com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"});
+                print('flutter 调用原生 回调 cpResult=$result');
               },
               child: Text("通过 flutter_bridge 调用方法 flutterCallNative"),
             ),
-
             MaterialButton(
               onPressed: () async {
-                CallInfo cp = CallInfo();
-                cp.methodName = "flutterCallNative2";
-                cp.params = {"aa": "bbb"};
-                ResultInfo cpResult = await NativeRouterApi().call(cp);
-                print('flutter 调用原生 回调 cpResult=${cpResult.toString()}');
+                var result = await FlutterBridge.instance.call("startEnterActivity", {"pageName": "com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"});
+                print('flutter 调用原生 回调 cpResult=$result');
               },
               child: Text("通过 flutter_bridge 调用方法 flutterCallNative2"),
             ),

@@ -1,5 +1,6 @@
 package com.niluogeg.flutterbridge.flutter_bridge_example
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -26,9 +27,12 @@ class MainActivity : FlutterActivity() {
         })
 
 
-        FlutterBridge.instance.registerHandler("flutterCallNative2",object : MethodHandle {
+        FlutterBridge.instance.registerHandler("startEnterActivity",object : MethodHandle {
             override fun onMethodCall(params: Map<String, Any?>): String {
-                Log.e("flutterCallNative2", "native 收到 flutter 的调用 params${params.toString()}")
+                val pageName = (params.get("pageName") as String?) ?: ""
+                var intent = Intent(applicationContext, Class.forName(pageName))
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                applicationContext.startActivity(intent)
                 return "native 收到 flutter 的调用"
             }
         })
