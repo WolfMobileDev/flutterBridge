@@ -42,84 +42,20 @@ class CallInfo {
   }
 }
 
-class StackInfo {
-  List<Object> containers;
-  Map<Object, Object> routes;
-
-  Object encode() {
-    final Map<Object, Object> pigeonMap = <Object, Object>{};
-    pigeonMap['containers'] = containers;
-    pigeonMap['routes'] = routes;
-    return pigeonMap;
-  }
-
-  static StackInfo decode(Object message) {
-    final Map<Object, Object> pigeonMap = message as Map<Object, Object>;
-    return StackInfo()
-      ..containers = pigeonMap['containers'] as List<Object>
-      ..routes = pigeonMap['routes'] as Map<Object, Object>;
-  }
-}
-
 abstract class FlutterRouterApi {
-  ResultInfo send(CallInfo arg);
-  ResultInfo registerHandler(CallInfo arg);
-  ResultInfo pushRoute(CallInfo arg);
-  void popRoute(CallInfo arg);
+  ResultInfo call(CallInfo arg);
   static void setup(FlutterRouterApi api) {
     {
       const BasicMessageChannel<Object> channel =
-          BasicMessageChannel<Object>('dev.flutter.pigeon.FlutterRouterApi.send', StandardMessageCodec());
+          BasicMessageChannel<Object>('dev.flutter.pigeon.FlutterRouterApi.call', StandardMessageCodec());
       if (api == null) {
         channel.setMessageHandler(null);
       } else {
         channel.setMessageHandler((Object message) async {
-          assert(message != null, 'Argument for dev.flutter.pigeon.FlutterRouterApi.send was null. Expected CallInfo.');
+          assert(message != null, 'Argument for dev.flutter.pigeon.FlutterRouterApi.call was null. Expected CallInfo.');
           final CallInfo input = CallInfo.decode(message);
-          final ResultInfo output = api.send(input);
+          final ResultInfo output = api.call(input);
           return output.encode();
-        });
-      }
-    }
-    {
-      const BasicMessageChannel<Object> channel =
-          BasicMessageChannel<Object>('dev.flutter.pigeon.FlutterRouterApi.registerHandler', StandardMessageCodec());
-      if (api == null) {
-        channel.setMessageHandler(null);
-      } else {
-        channel.setMessageHandler((Object message) async {
-          assert(message != null, 'Argument for dev.flutter.pigeon.FlutterRouterApi.registerHandler was null. Expected CallInfo.');
-          final CallInfo input = CallInfo.decode(message);
-          final ResultInfo output = api.registerHandler(input);
-          return output.encode();
-        });
-      }
-    }
-    {
-      const BasicMessageChannel<Object> channel =
-          BasicMessageChannel<Object>('dev.flutter.pigeon.FlutterRouterApi.pushRoute', StandardMessageCodec());
-      if (api == null) {
-        channel.setMessageHandler(null);
-      } else {
-        channel.setMessageHandler((Object message) async {
-          assert(message != null, 'Argument for dev.flutter.pigeon.FlutterRouterApi.pushRoute was null. Expected CallInfo.');
-          final CallInfo input = CallInfo.decode(message);
-          final ResultInfo output = api.pushRoute(input);
-          return output.encode();
-        });
-      }
-    }
-    {
-      const BasicMessageChannel<Object> channel =
-          BasicMessageChannel<Object>('dev.flutter.pigeon.FlutterRouterApi.popRoute', StandardMessageCodec());
-      if (api == null) {
-        channel.setMessageHandler(null);
-      } else {
-        channel.setMessageHandler((Object message) async {
-          assert(message != null, 'Argument for dev.flutter.pigeon.FlutterRouterApi.popRoute was null. Expected CallInfo.');
-          final CallInfo input = CallInfo.decode(message);
-          api.popRoute(input);
-          return;
         });
       }
     }
@@ -127,10 +63,10 @@ abstract class FlutterRouterApi {
 }
 
 class NativeRouterApi {
-  Future<ResultInfo> send(CallInfo arg) async {
+  Future<ResultInfo> call(CallInfo arg) async {
     final Object encoded = arg.encode();
     const BasicMessageChannel<Object> channel =
-        BasicMessageChannel<Object>('dev.flutter.pigeon.NativeRouterApi.send', StandardMessageCodec());
+        BasicMessageChannel<Object>('dev.flutter.pigeon.NativeRouterApi.call', StandardMessageCodec());
     final Map<Object, Object> replyMap = await channel.send(encoded) as Map<Object, Object>;
     if (replyMap == null) {
       throw PlatformException(
@@ -147,75 +83,6 @@ class NativeRouterApi {
       );
     } else {
       return ResultInfo.decode(replyMap['result']);
-    }
-  }
-
-  Future<ResultInfo> registerHandler(CallInfo arg) async {
-    final Object encoded = arg.encode();
-    const BasicMessageChannel<Object> channel =
-        BasicMessageChannel<Object>('dev.flutter.pigeon.NativeRouterApi.registerHandler', StandardMessageCodec());
-    final Map<Object, Object> replyMap = await channel.send(encoded) as Map<Object, Object>;
-    if (replyMap == null) {
-      throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-        details: null,
-      );
-    } else if (replyMap['error'] != null) {
-      final Map<Object, Object> error = (replyMap['error'] as Map<Object, Object>);
-      throw PlatformException(
-        code: (error['code'] as String),
-        message: error['message'] as String,
-        details: error['details'],
-      );
-    } else {
-      return ResultInfo.decode(replyMap['result']);
-    }
-  }
-
-  Future<ResultInfo> pushNativeRoute(CallInfo arg) async {
-    final Object encoded = arg.encode();
-    const BasicMessageChannel<Object> channel =
-        BasicMessageChannel<Object>('dev.flutter.pigeon.NativeRouterApi.pushNativeRoute', StandardMessageCodec());
-    final Map<Object, Object> replyMap = await channel.send(encoded) as Map<Object, Object>;
-    if (replyMap == null) {
-      throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-        details: null,
-      );
-    } else if (replyMap['error'] != null) {
-      final Map<Object, Object> error = (replyMap['error'] as Map<Object, Object>);
-      throw PlatformException(
-        code: (error['code'] as String),
-        message: error['message'] as String,
-        details: error['details'],
-      );
-    } else {
-      return ResultInfo.decode(replyMap['result']);
-    }
-  }
-
-  Future<void> saveStackToHost(StackInfo arg) async {
-    final Object encoded = arg.encode();
-    const BasicMessageChannel<Object> channel =
-        BasicMessageChannel<Object>('dev.flutter.pigeon.NativeRouterApi.saveStackToHost', StandardMessageCodec());
-    final Map<Object, Object> replyMap = await channel.send(encoded) as Map<Object, Object>;
-    if (replyMap == null) {
-      throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-        details: null,
-      );
-    } else if (replyMap['error'] != null) {
-      final Map<Object, Object> error = (replyMap['error'] as Map<Object, Object>);
-      throw PlatformException(
-        code: (error['code'] as String),
-        message: error['message'] as String,
-        details: error['details'],
-      );
-    } else {
-      // noop
     }
   }
 }

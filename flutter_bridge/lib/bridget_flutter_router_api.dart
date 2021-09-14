@@ -13,20 +13,7 @@ class BridgetFlutterRouterApi extends FlutterRouterApi {
 
   static BridgetFlutterRouterApi _instance;
 
-  @override
-  void popRoute(CallInfo arg) {
-    print('BridgetFlutterRouterApi popRoute arg =${arg.toString()}');
-  }
 
-  @override
-  ResultInfo pushRoute(CallInfo arg) {
-    print('BridgetFlutterRouterApi popRoute arg =${arg.toString()}');
-    var cp = ResultInfo();
-    cp.result = "BridgetFlutterRouterApi pushRoute";
-    return cp;
-  }
-
-  @override
   ResultInfo registerHandler(CallInfo arg) {
     print('BridgetFlutterRouterApi registerHandler arg =${arg.toString()}');
     var cp = ResultInfo();
@@ -35,7 +22,7 @@ class BridgetFlutterRouterApi extends FlutterRouterApi {
   }
 
   @override
-  ResultInfo send(CallInfo arg) {
+  ResultInfo call(CallInfo arg) {
     print('BridgetFlutterRouterApi send arg =${arg.toString()}');
     var cp = ResultInfo();
     cp.result = "BridgetFlutterRouterApi send";

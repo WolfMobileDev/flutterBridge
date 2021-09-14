@@ -9,7 +9,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class FBResultInfo;
 @class FBCallInfo;
-@class FBStackInfo;
 
 @interface FBResultInfo : NSObject
 @property(nonatomic, copy, nullable) NSString * result;
@@ -20,23 +19,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong, nullable) NSDictionary * params;
 @end
 
-@interface FBStackInfo : NSObject
-@property(nonatomic, strong, nullable) NSArray * containers;
-@property(nonatomic, strong, nullable) NSDictionary * routes;
-@end
-
 @interface FBFlutterRouterApi : NSObject
 - (instancetype)initWithBinaryMessenger:(id<FlutterBinaryMessenger>)binaryMessenger;
-- (void)send:(FBCallInfo*)input completion:(void(^)(FBResultInfo*, NSError* _Nullable))completion;
-- (void)registerHandler:(FBCallInfo*)input completion:(void(^)(FBResultInfo*, NSError* _Nullable))completion;
-- (void)pushRoute:(FBCallInfo*)input completion:(void(^)(FBResultInfo*, NSError* _Nullable))completion;
-- (void)popRoute:(FBCallInfo*)input completion:(void(^)(NSError* _Nullable))completion;
+- (void)call:(FBCallInfo*)input completion:(void(^)(FBResultInfo*, NSError* _Nullable))completion;
 @end
 @protocol FBNativeRouterApi
--(nullable FBResultInfo *)send:(FBCallInfo*)input error:(FlutterError *_Nullable *_Nonnull)error;
--(nullable FBResultInfo *)registerHandler:(FBCallInfo*)input error:(FlutterError *_Nullable *_Nonnull)error;
--(nullable FBResultInfo *)pushNativeRoute:(FBCallInfo*)input error:(FlutterError *_Nullable *_Nonnull)error;
--(void)saveStackToHost:(FBStackInfo*)input error:(FlutterError *_Nullable *_Nonnull)error;
+-(nullable FBResultInfo *)call:(FBCallInfo*)input error:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
 extern void FBNativeRouterApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<FBNativeRouterApi> _Nullable api);

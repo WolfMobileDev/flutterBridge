@@ -5,11 +5,6 @@ import android.util.Log
 import androidx.annotation.NonNull
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
-import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.plugin.common.PluginRegistry.Registrar
 
 /** FlutterBridgePlugin */
 class FlutterBridgePlugin : FlutterPlugin, Message.NativeRouterApi {
@@ -30,7 +25,7 @@ class FlutterBridgePlugin : FlutterPlugin, Message.NativeRouterApi {
 
     }
 
-    override fun send(arg: Message.CallInfo?): Message.ResultInfo {
+    override fun call(arg: Message.CallInfo?): Message.ResultInfo {
         Log.e("FlutterBridgePlugin", "send=${arg?.params.toString()}")
         val pageName = (arg?.params?.get("pageName") as String?) ?: ""
 
@@ -44,24 +39,13 @@ class FlutterBridgePlugin : FlutterPlugin, Message.NativeRouterApi {
         return cp
     }
 
-    override fun registerHandler(arg: Message.CallInfo?): Message.ResultInfo {
+     fun registerHandler(arg: Message.CallInfo?): Message.ResultInfo {
         Log.e("FlutterBridgePlugin", "registerHandler=${arg.toString()}")
         val cp = Message.ResultInfo();
         cp.result = "FlutterBridgePlugin registerHandler";
         return cp
     }
 
-    override fun pushNativeRoute(arg: Message.CallInfo?): Message.ResultInfo {
 
-        Log.e("FlutterBridgePlugin", "pushNativeRoute=${arg.toString()}")
-        val cp = Message.ResultInfo();
-        cp.result = "FlutterBridgePlugin pushNativeRoute";
-        return cp
-    }
-
-
-    override fun saveStackToHost(arg: Message.StackInfo?) {
-        Log.e("FlutterBridgePlugin", "saveStackToHost=${arg.toString()}")
-    }
 
 }

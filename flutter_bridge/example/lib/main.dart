@@ -36,10 +36,10 @@ class _MyAppState extends State<MyApp> {
           children: [
             MaterialButton(
               onPressed: () async {
-                CallInfo cp = CallInfo();
-                cp.methodName = "hhhh";
-                ResultInfo cpResult =   await NativeRouterApi().pushNativeRoute(cp);
-                print('flutter 调用原生 回调 cpResult=${cpResult.toString()}');
+                // CallInfo cp = CallInfo();
+                // cp.methodName = "hhhh";
+                // ResultInfo cpResult =   await NativeRouterApi().pushNativeRoute(cp);
+                // print('flutter 调用原生 回调 cpResult=${cpResult.toString()}');
               },
               child: Text("通过 flutter_bridge 调用方法"),
             ),  MaterialButton(
@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> {
                 CallInfo cp = CallInfo();
                 cp.methodName = "startNativePage";
                 cp.params={"pageName":"com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"};
-                ResultInfo cpResult =   await NativeRouterApi().send(cp);
+                ResultInfo cpResult =   await NativeRouterApi().call(cp);
                 print('flutter 调用原生 回调 cpResult=${cpResult.toString()}');
               },
               child: Text("打开原生页面"),

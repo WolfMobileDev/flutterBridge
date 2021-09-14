@@ -19,25 +19,15 @@ class StackInfo {
 
 @HostApi()
 abstract class NativeRouterApi {
-  ResultInfo send(CallInfo callInfo);
+  ResultInfo call(CallInfo callInfo);
 
-  ResultInfo registerHandler(CallInfo callInfo);
 
-  ResultInfo pushNativeRoute(CallInfo param);
-
-  void saveStackToHost(StackInfo stack);
 }
 
 @FlutterApi()
 abstract class FlutterRouterApi {
-  ResultInfo send(CallInfo callInfo);
+  ResultInfo call(CallInfo callInfo);
 
-  ResultInfo registerHandler(CallInfo callInfo);
-
-
-  ResultInfo pushRoute(CallInfo param);
-
-  void popRoute(CallInfo param);
 }
 
 //D:\soft\flutter\flutter_2.0.3\flutter\bin\flutter pub run pigeon --input pigeon/messages.dart

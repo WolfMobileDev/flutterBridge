@@ -59,32 +59,6 @@ public class Message {
     }
   }
 
-  /** Generated class from Pigeon that represents data sent in messages. */
-  public static class StackInfo {
-    private List<Object> containers;
-    public List<Object> getContainers() { return containers; }
-    public void setContainers(List<Object> setterArg) { this.containers = setterArg; }
-
-    private Map<Object, Object> routes;
-    public Map<Object, Object> getRoutes() { return routes; }
-    public void setRoutes(Map<Object, Object> setterArg) { this.routes = setterArg; }
-
-    Map<String, Object> toMap() {
-      Map<String, Object> toMapResult = new HashMap<>();
-      toMapResult.put("containers", containers);
-      toMapResult.put("routes", routes);
-      return toMapResult;
-    }
-    static StackInfo fromMap(Map<String, Object> map) {
-      StackInfo fromMapResult = new StackInfo();
-      Object containers = map.get("containers");
-      fromMapResult.containers = (List<Object>)containers;
-      Object routes = map.get("routes");
-      fromMapResult.routes = (Map<Object, Object>)routes;
-      return fromMapResult;
-    }
-  }
-
   /** Generated class from Pigeon that represents Flutter messages that can be called from Java.*/
   public static class FlutterRouterApi {
     private final BinaryMessenger binaryMessenger;
@@ -94,132 +68,36 @@ public class Message {
     public interface Reply<T> {
       void reply(T reply);
     }
-    public void send(CallInfo argInput, Reply<ResultInfo> callback) {
+    public void call(CallInfo argInput, Reply<ResultInfo> callback) {
       BasicMessageChannel<Object> channel =
-          new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.FlutterRouterApi.send", new StandardMessageCodec());
+          new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.FlutterRouterApi.call", new StandardMessageCodec());
       Map<String, Object> inputMap = argInput.toMap();
       channel.send(inputMap, channelReply -> {
         Map outputMap = (Map)channelReply;
         @SuppressWarnings("ConstantConditions")
         ResultInfo output = ResultInfo.fromMap(outputMap);
         callback.reply(output);
-      });
-    }
-    public void registerHandler(CallInfo argInput, Reply<ResultInfo> callback) {
-      BasicMessageChannel<Object> channel =
-          new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.FlutterRouterApi.registerHandler", new StandardMessageCodec());
-      Map<String, Object> inputMap = argInput.toMap();
-      channel.send(inputMap, channelReply -> {
-        Map outputMap = (Map)channelReply;
-        @SuppressWarnings("ConstantConditions")
-        ResultInfo output = ResultInfo.fromMap(outputMap);
-        callback.reply(output);
-      });
-    }
-    public void pushRoute(CallInfo argInput, Reply<ResultInfo> callback) {
-      BasicMessageChannel<Object> channel =
-          new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.FlutterRouterApi.pushRoute", new StandardMessageCodec());
-      Map<String, Object> inputMap = argInput.toMap();
-      channel.send(inputMap, channelReply -> {
-        Map outputMap = (Map)channelReply;
-        @SuppressWarnings("ConstantConditions")
-        ResultInfo output = ResultInfo.fromMap(outputMap);
-        callback.reply(output);
-      });
-    }
-    public void popRoute(CallInfo argInput, Reply<Void> callback) {
-      BasicMessageChannel<Object> channel =
-          new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.FlutterRouterApi.popRoute", new StandardMessageCodec());
-      Map<String, Object> inputMap = argInput.toMap();
-      channel.send(inputMap, channelReply -> {
-        callback.reply(null);
       });
     }
   }
 
   /** Generated interface from Pigeon that represents a handler of messages from Flutter.*/
   public interface NativeRouterApi {
-    ResultInfo send(CallInfo arg);
-    ResultInfo registerHandler(CallInfo arg);
-    ResultInfo pushNativeRoute(CallInfo arg);
-    void saveStackToHost(StackInfo arg);
+    ResultInfo call(CallInfo arg);
 
     /** Sets up an instance of `NativeRouterApi` to handle messages through the `binaryMessenger`. */
     static void setup(BinaryMessenger binaryMessenger, NativeRouterApi api) {
       {
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.NativeRouterApi.send", new StandardMessageCodec());
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.NativeRouterApi.call", new StandardMessageCodec());
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
             try {
               @SuppressWarnings("ConstantConditions")
               CallInfo input = CallInfo.fromMap((Map<String, Object>)message);
-              ResultInfo output = api.send(input);
+              ResultInfo output = api.call(input);
               wrapped.put("result", output.toMap());
-            }
-            catch (Error | RuntimeException exception) {
-              wrapped.put("error", wrapError(exception));
-            }
-            reply.reply(wrapped);
-          });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.NativeRouterApi.registerHandler", new StandardMessageCodec());
-        if (api != null) {
-          channel.setMessageHandler((message, reply) -> {
-            Map<String, Object> wrapped = new HashMap<>();
-            try {
-              @SuppressWarnings("ConstantConditions")
-              CallInfo input = CallInfo.fromMap((Map<String, Object>)message);
-              ResultInfo output = api.registerHandler(input);
-              wrapped.put("result", output.toMap());
-            }
-            catch (Error | RuntimeException exception) {
-              wrapped.put("error", wrapError(exception));
-            }
-            reply.reply(wrapped);
-          });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.NativeRouterApi.pushNativeRoute", new StandardMessageCodec());
-        if (api != null) {
-          channel.setMessageHandler((message, reply) -> {
-            Map<String, Object> wrapped = new HashMap<>();
-            try {
-              @SuppressWarnings("ConstantConditions")
-              CallInfo input = CallInfo.fromMap((Map<String, Object>)message);
-              ResultInfo output = api.pushNativeRoute(input);
-              wrapped.put("result", output.toMap());
-            }
-            catch (Error | RuntimeException exception) {
-              wrapped.put("error", wrapError(exception));
-            }
-            reply.reply(wrapped);
-          });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.NativeRouterApi.saveStackToHost", new StandardMessageCodec());
-        if (api != null) {
-          channel.setMessageHandler((message, reply) -> {
-            Map<String, Object> wrapped = new HashMap<>();
-            try {
-              @SuppressWarnings("ConstantConditions")
-              StackInfo input = StackInfo.fromMap((Map<String, Object>)message);
-              api.saveStackToHost(input);
-              wrapped.put("result", null);
             }
             catch (Error | RuntimeException exception) {
               wrapped.put("error", wrapError(exception));

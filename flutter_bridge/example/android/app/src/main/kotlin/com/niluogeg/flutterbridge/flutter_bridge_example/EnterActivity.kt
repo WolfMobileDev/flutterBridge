@@ -16,12 +16,13 @@ class EnterActivity : FlutterActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         findViewById<View>(R.id.btn).setOnClickListener {
 
             val fb = getPlugin(flutterEngine);
             val params = Message.CallInfo()
             params.methodName = "flutterMethod"
-            fb?.flutterApi?.send(
+            fb?.flutterApi?.call(
                 params
             ) { Log.e("MainActivity", "调用flutter 方法回调 ${it.result}") }
         }
