@@ -19,14 +19,14 @@ class StackInfo {
 
 @HostApi()
 abstract class NativeRouterApi {
-  ResultInfo call(CallInfo callInfo);
+  ResultInfo callNative(CallInfo callInfo);
 
 
 }
 
 @FlutterApi()
 abstract class FlutterRouterApi {
-  ResultInfo call(CallInfo callInfo);
+  ResultInfo callFlutter(CallInfo callInfo);
 
 }
 

@@ -76,10 +76,10 @@ static NSDictionary<NSString*, id>* wrapResult(NSDictionary *result, FlutterErro
   return self;
 }
 
-- (void)call:(FBCallInfo*)input completion:(void(^)(FBResultInfo*, NSError* _Nullable))completion {
+- (void)callFlutter:(FBCallInfo*)input completion:(void(^)(FBResultInfo*, NSError* _Nullable))completion {
   FlutterBasicMessageChannel *channel =
     [FlutterBasicMessageChannel
-      messageChannelWithName:@"dev.flutter.pigeon.FlutterRouterApi.call"
+      messageChannelWithName:@"dev.flutter.pigeon.FlutterRouterApi.callFlutter"
       binaryMessenger:self.binaryMessenger];
   NSDictionary* inputMap = [input toMap];
   [channel sendMessage:inputMap reply:^(id reply) {
@@ -93,13 +93,13 @@ void FBNativeRouterApiSetup(id<FlutterBinaryMessenger> binaryMessenger, id<FBNat
   {
     FlutterBasicMessageChannel *channel =
       [FlutterBasicMessageChannel
-        messageChannelWithName:@"dev.flutter.pigeon.NativeRouterApi.call"
+        messageChannelWithName:@"dev.flutter.pigeon.NativeRouterApi.callNative"
         binaryMessenger:binaryMessenger];
     if (api) {
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         FBCallInfo *input = [FBCallInfo fromMap:message];
         FlutterError *error;
-        FBResultInfo *output = [api call:input error:&error];
+        FBResultInfo *output = [api callNative:input error:&error];
         callback(wrapResult([output toMap], error));
       }];
     }

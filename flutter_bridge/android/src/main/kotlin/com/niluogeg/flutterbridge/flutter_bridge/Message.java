@@ -68,9 +68,9 @@ public class Message {
     public interface Reply<T> {
       void reply(T reply);
     }
-    public void call(CallInfo argInput, Reply<ResultInfo> callback) {
+    public void callFlutter(CallInfo argInput, Reply<ResultInfo> callback) {
       BasicMessageChannel<Object> channel =
-          new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.FlutterRouterApi.call", new StandardMessageCodec());
+          new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.FlutterRouterApi.callFlutter", new StandardMessageCodec());
       Map<String, Object> inputMap = argInput.toMap();
       channel.send(inputMap, channelReply -> {
         Map outputMap = (Map)channelReply;
@@ -83,20 +83,20 @@ public class Message {
 
   /** Generated interface from Pigeon that represents a handler of messages from Flutter.*/
   public interface NativeRouterApi {
-    ResultInfo call(CallInfo arg);
+    ResultInfo callNative(CallInfo arg);
 
     /** Sets up an instance of `NativeRouterApi` to handle messages through the `binaryMessenger`. */
     static void setup(BinaryMessenger binaryMessenger, NativeRouterApi api) {
       {
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.NativeRouterApi.call", new StandardMessageCodec());
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.NativeRouterApi.callNative", new StandardMessageCodec());
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
             try {
               @SuppressWarnings("ConstantConditions")
               CallInfo input = CallInfo.fromMap((Map<String, Object>)message);
-              ResultInfo output = api.call(input);
+              ResultInfo output = api.callNative(input);
               wrapped.put("result", output.toMap());
             }
             catch (Error | RuntimeException exception) {

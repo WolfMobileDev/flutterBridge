@@ -8,7 +8,7 @@
     <Button
         android:id="@+id/btn"
         android:layout_width="match_parent"
-        android:text="aaaa"
+        android:text="调用flutter方法"
         android:layout_height="48dp"/>
 
 </LinearLayout>

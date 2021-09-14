@@ -43,18 +43,18 @@ class CallInfo {
 }
 
 abstract class FlutterRouterApi {
-  ResultInfo call(CallInfo arg);
+  ResultInfo callFlutter(CallInfo arg);
   static void setup(FlutterRouterApi api) {
     {
       const BasicMessageChannel<Object> channel =
-          BasicMessageChannel<Object>('dev.flutter.pigeon.FlutterRouterApi.call', StandardMessageCodec());
+          BasicMessageChannel<Object>('dev.flutter.pigeon.FlutterRouterApi.callFlutter', StandardMessageCodec());
       if (api == null) {
         channel.setMessageHandler(null);
       } else {
         channel.setMessageHandler((Object message) async {
-          assert(message != null, 'Argument for dev.flutter.pigeon.FlutterRouterApi.call was null. Expected CallInfo.');
+          assert(message != null, 'Argument for dev.flutter.pigeon.FlutterRouterApi.callFlutter was null. Expected CallInfo.');
           final CallInfo input = CallInfo.decode(message);
-          final ResultInfo output = api.call(input);
+          final ResultInfo output = api.callFlutter(input);
           return output.encode();
         });
       }
@@ -63,10 +63,10 @@ abstract class FlutterRouterApi {
 }
 
 class NativeRouterApi {
-  Future<ResultInfo> call(CallInfo arg) async {
+  Future<ResultInfo> callNative(CallInfo arg) async {
     final Object encoded = arg.encode();
     const BasicMessageChannel<Object> channel =
-        BasicMessageChannel<Object>('dev.flutter.pigeon.NativeRouterApi.call', StandardMessageCodec());
+        BasicMessageChannel<Object>('dev.flutter.pigeon.NativeRouterApi.callNative', StandardMessageCodec());
     final Map<Object, Object> replyMap = await channel.send(encoded) as Map<Object, Object>;
     if (replyMap == null) {
       throw PlatformException(

@@ -1,8 +1,6 @@
 package com.niluogeg.flutterbridge.flutter_bridge
 
 import android.content.Context
-import android.content.Intent
-import android.util.Log
 import androidx.annotation.NonNull
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -19,9 +17,10 @@ class FlutterBridgePlugin : FlutterPlugin, Message.NativeRouterApi {
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         applicationContext = flutterPluginBinding.applicationContext
-        flutterBridge = FlutterBridge.instance
-        Message.NativeRouterApi.setup(flutterPluginBinding.binaryMessenger, this)
         flutterApi = Message.FlutterRouterApi(flutterPluginBinding.binaryMessenger)
+        flutterBridge = FlutterBridge.instance
+        flutterBridge.flutterApi=flutterApi
+        Message.NativeRouterApi.setup(flutterPluginBinding.binaryMessenger, this)
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -29,10 +28,10 @@ class FlutterBridgePlugin : FlutterPlugin, Message.NativeRouterApi {
     }
 
 
-    override fun call(callInfo: Message.CallInfo?): Message.ResultInfo {
+    override fun callNative(callInfo: Message.CallInfo?): Message.ResultInfo {
         val methodMame = callInfo?.methodName ?: ""
         val params = (callInfo?.params ?: HashMap<String, Any?>()) as Map<String, Any?>
-        val result = flutterBridge.call(methodMame, params)
+        val result = flutterBridge.callNative(methodMame, params)
         val ri = Message.ResultInfo()
         ri.result = result
         return ri

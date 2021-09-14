@@ -3,6 +3,8 @@ package com.niluogeg.flutterbridge.flutter_bridge
 class FlutterBridge private constructor() {
 
 
+    lateinit var flutterApi: Message.FlutterRouterApi
+
     private val methodList = ArrayList<String>()
     private val methodMap = hashMapOf<String, MethodHandler>()
 
@@ -26,9 +28,24 @@ class FlutterBridge private constructor() {
      * @param:方法入参
      * @return : 方法返回
      */
-    fun call(methodName: String, params: Map<String, Any?>): String {
+    internal fun callNative(methodName: String, params: Map<String, Any?>): String {
         val methodHandle = methodMap[methodName]
         return methodHandle?.onMethodCall(params) ?: ""
+    }
+
+    /**
+     * 调用flutter方法
+     * @methodName: 方法名
+     * @param:方法入参
+     * @return : 方法返回
+     */
+    fun callFlutter(methodName: String, params: Map<String, Any?>, callBack: HandleCallBack) {
+        val ci = Message.CallInfo()
+        ci.methodName = methodName
+        ci.params = params as Map<Any, Any?>
+        flutterApi.callFlutter(ci) { reply ->
+            callBack.callSuccess(reply?.result ?: "")
+        }
     }
 
 }
