@@ -19,15 +19,18 @@ class _MyAppState extends State<MyApp> {
   }
 
   _registMethod() {
-    FlutterBridge.instance.registerHandler("nativeCallFlutter", (params) {
-      print('flutter 收到 原生 的调用 params${params.toString()}');
-      return "flutter 收到 native 的调用";
+    FlutterBridge.instance.registerHandler("getFlutterVersion", (params) {
+      return _getVersion();
     });
 
     FlutterBridge.instance.registerHandler("nativeCallFlutter2", (params) {
       print('flutter 收到 原生的调用 params${params.toString()}');
       return "flutter 收到 native 的调用";
     });
+  }
+
+  _getVersion(){
+    return "1.0.0";
   }
 
   @override
@@ -45,22 +48,14 @@ class _MyAppState extends State<MyApp> {
                     params: {"pageName": "com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"});
                 print('flutter 调用原生 返回值 cpResult=$result');
               },
-              child: Text("startEnterActivity"),
+              child: Text("startEnterActivity-带入参"),
             ),
             MaterialButton(
               onPressed: () async {
                 var result = await FlutterBridge.instance.callNative("getSDKVersion");
                 print('sdk version =$result');
               },
-              child: Text("getSDKVersion"),
-            ),
-
-            MaterialButton(
-              onPressed: () async {
-                var result = await FlutterBridge.instance.callNative("getSDKVersionaa");
-                print('sdk version =$result');
-              },
-              child: Text("异步方法"),
+              child: Text("getSDKVersion-不带入参"),
             ),
           ],
         ),

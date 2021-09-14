@@ -39,7 +39,11 @@ class FlutterBridge private constructor() {
      * @param:方法入参
      * @return : 方法返回
      */
-    fun callFlutter(methodName: String, params: Map<String, Any?>, callBack: HandleCallBack) {
+    fun callFlutter(
+        methodName: String,
+        params: Map<String, Any?> = HashMap(),
+        callBack: HandleCallBack = DefaultHandleCallBack()
+    ) {
         val ci = Message.CallInfo()
         ci.methodName = methodName
         ci.params = params as Map<Any, Any?>
