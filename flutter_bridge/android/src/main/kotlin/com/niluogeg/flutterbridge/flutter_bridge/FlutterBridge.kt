@@ -1,13 +1,10 @@
 package com.niluogeg.flutterbridge.flutter_bridge
 
-import android.util.Log
-import io.flutter.embedding.engine.FlutterEngine
-
 class FlutterBridge private constructor() {
 
 
     private val methodList = ArrayList<String>()
-    private val methodMap = hashMapOf<String, MethodHandle>()
+    private val methodMap = hashMapOf<String, MethodHandler>()
 
 
     companion object {
@@ -18,8 +15,8 @@ class FlutterBridge private constructor() {
     /**
      * 注册方法
      */
-    fun registerHandler(methodName: String, methodHandle: MethodHandle) {
-        methodMap[methodName] = methodHandle
+    fun registerHandler(methodName: String, methodHandler: MethodHandler) {
+        methodMap[methodName] = methodHandler
     }
 
 

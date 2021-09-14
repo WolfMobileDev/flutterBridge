@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 
 import 'messages.dart';
 
-abstract class MethodHandle {
+abstract class MethodHandler {
   String onMethodCall(Map<String, Object> params);
 }
 
@@ -17,10 +17,10 @@ class FlutterBridge {
     return _instance;
   }
 
-  var _methodMap = Map<String, MethodHandle>();
+  var _methodMap = Map<String, MethodHandler>();
 
   /// 注册方法
-  void registerHandler(String methodName, MethodHandle methodHandle) {
+  void registerHandler(String methodName, MethodHandler methodHandle) {
     _methodMap[methodName] = methodHandle;
   }
 

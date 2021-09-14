@@ -3,15 +3,9 @@ package com.niluogeg.flutterbridge.flutter_bridge_example
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import com.niluogeg.flutterbridge.flutter_bridge.FlutterBridge
-import com.niluogeg.flutterbridge.flutter_bridge.FlutterBridgePlugin
-import com.niluogeg.flutterbridge.flutter_bridge.Message
-import com.niluogeg.flutterbridge.flutter_bridge.MethodHandle
+import com.niluogeg.flutterbridge.flutter_bridge.MethodHandler
 import io.flutter.embedding.android.FlutterActivity
-import io.flutter.embedding.engine.plugins.FlutterPlugin
-
-import io.flutter.embedding.engine.FlutterEngine
 
 
 class MainActivity : FlutterActivity() {
@@ -19,7 +13,7 @@ class MainActivity : FlutterActivity() {
         super.onCreate(savedInstanceState)
 
 
-        FlutterBridge.instance.registerHandler("flutterCallNative",object : MethodHandle {
+        FlutterBridge.instance.registerHandler("flutterCallNative",object : MethodHandler {
             override fun onMethodCall(params: Map<String, Any?>): String {
                 Log.e("flutterCallNative", "native 收到 flutter 的调用 params${params.toString()}")
                 return "native 收到 flutter 的调用"
@@ -27,7 +21,7 @@ class MainActivity : FlutterActivity() {
         })
 
 
-        FlutterBridge.instance.registerHandler("startEnterActivity",object : MethodHandle {
+        FlutterBridge.instance.registerHandler("startEnterActivity",object : MethodHandler {
             override fun onMethodCall(params: Map<String, Any?>): String {
                 val pageName = (params.get("pageName") as String?) ?: ""
                 var intent = Intent(applicationContext, Class.forName(pageName))

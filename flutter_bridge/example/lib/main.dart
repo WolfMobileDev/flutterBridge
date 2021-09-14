@@ -25,6 +25,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,16 +35,6 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Column(
           children: [
-            MaterialButton(
-              onPressed: () async {
-                // CallInfo cp = CallInfo();
-                // cp.methodName = "startNativePage";
-                // cp.params={"pageName":"com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"};
-                // ResultInfo cpResult =   await NativeRouterApi().call(cp);
-                // print('flutter 调用原生 回调 cpResult=${cpResult.toString()}');
-              },
-              child: Text("打开原生页面"),
-            ),
             MaterialButton(
               onPressed: () async {
                 var result = await FlutterBridge.instance.call("flutterCallNative",
@@ -57,7 +48,7 @@ class _MyAppState extends State<MyApp> {
                 var result = await FlutterBridge.instance.call("startEnterActivity", {"pageName": "com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"});
                 print('flutter 调用原生 回调 cpResult=$result');
               },
-              child: Text("通过 flutter_bridge 调用方法 flutterCallNative2"),
+              child: Text("startEnterActivity"),
             ),
           ],
         ),
