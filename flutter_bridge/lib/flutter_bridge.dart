@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 
 import 'messages.dart';
 
-typedef MethodHandler = String Function(Map<dynamic, dynamic> params);
+typedef MethodHandler = String Function(Map<String, dynamic> params);
 
 class FlutterBridge extends FlutterRouterApi {
   FlutterBridge._();
@@ -15,7 +15,6 @@ class FlutterBridge extends FlutterRouterApi {
     FlutterRouterApi.setup(_instance);
     return _instance;
   }
-
 
   var _methodMap = Map<String, MethodHandler>();
 
@@ -33,11 +32,11 @@ class FlutterBridge extends FlutterRouterApi {
   }
 
   @override
-  ResultInfo callFlutter(CallInfo callInfo)  {
+  ResultInfo callFlutter(CallInfo callInfo) {
     String methodName = callInfo.methodName;
-    Map<dynamic, dynamic> params = callInfo.params;
+    Map<String, dynamic> params = Map<String, dynamic>.from(callInfo.params);
     MethodHandler methodHandler = _methodMap[methodName];
-    String result =  methodHandler(params);
+    String result = methodHandler(params);
     ResultInfo ri = ResultInfo();
     ri.result = result;
     return ri;

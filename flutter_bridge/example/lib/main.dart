@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-import 'package:flutter_bridge/bridget_flutter_router_api.dart';
 import 'package:flutter_bridge/flutter_bridge.dart';
-import 'package:flutter_bridge/messages.dart';
 
 void main() {
   runApp(MyApp());
