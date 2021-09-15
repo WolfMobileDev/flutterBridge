@@ -64,4 +64,8 @@ class MainActivity : FlutterActivity() {
     }
 
 
+    override fun onDestroy() {
+        super.onDestroy()
+        FlutterBridge.instance.unRegisterHandler("startEnterActivity")
+    }
 }
