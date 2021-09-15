@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
           children: [
             MaterialButton(
               onPressed: () async {
-                var result = await FlutterBridge.instance.callNative("startEnterActivity",
+                var result = await FlutterBridge.instance.callNativeHaveReturn("startEnterActivity",
                     params: {"pageName": "com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"});
                 print('flutter 调用原生 返回值 cpResult=$result');
               },
@@ -52,7 +52,7 @@ class _MyAppState extends State<MyApp> {
             ),
             MaterialButton(
               onPressed: () async {
-                var result = await FlutterBridge.instance.callNative("getSDKVersion");
+                var result = await FlutterBridge.instance.callNativeHaveReturn("getSDKVersion");
                 print('sdk version =$result');
               },
               child: Text("getSDKVersion-不带入参"),
@@ -62,6 +62,14 @@ class _MyAppState extends State<MyApp> {
                 FlutterBridge.instance.callNativeNoReturn("callNativeNoReturn");
               },
               child: Text("调用没用返回值的方法"),
+            ),
+
+            MaterialButton(
+              onPressed: () async {
+                var result = await FlutterBridge.instance.callNativeHaveReturn("requestHttp");
+                print('requestHttp resutl =$result');
+              },
+              child: Text("requestHttp"),
             ),
           ],
         ),

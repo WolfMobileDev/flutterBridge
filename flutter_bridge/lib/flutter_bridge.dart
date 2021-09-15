@@ -9,6 +9,24 @@ typedef MethodHandlerHaveReturn = String Function(Map<String, dynamic> params);
 typedef MethodHandlerNoReturn = void Function(Map<String, dynamic> params);
 
 class FlutterBridge extends FlutterRouterApi {
+
+
+  @override
+  ResultInfo callFlutter(CallInfo callInfo) {
+    String methodName = callInfo.methodName;
+    Map<String, dynamic> params = Map<String, dynamic>.from(callInfo.params);
+    dynamic methodHandler = _methodMap[methodName];
+    if (methodHandler is MethodHandlerHaveReturn) {
+      String result = methodHandler(params);
+      ResultInfo ri = ResultInfo();
+      ri.result = result;
+      return ri;
+    } else if (methodHandler is MethodHandlerNoReturn) {
+      ResultInfo ri = ResultInfo();
+      return ri;
+    }
+  }
+
   FlutterBridge._();
 
   static final FlutterBridge _instance = FlutterBridge._();
@@ -29,7 +47,7 @@ class FlutterBridge extends FlutterRouterApi {
     _methodMap[methodName] = methodHandle;
   }
 
-  Future<String> callNative(String methodName, {Map<String, Object> params}) async {
+  Future<String> callNativeHaveReturn(String methodName, {Map<String, Object> params}) async {
     CallInfo cp = CallInfo();
     cp.methodName = methodName;
     cp.params = params;
@@ -44,19 +62,4 @@ class FlutterBridge extends FlutterRouterApi {
     await NativeRouterApi().callNative(cp);
   }
 
-  @override
-  ResultInfo callFlutter(CallInfo callInfo) {
-    String methodName = callInfo.methodName;
-    Map<String, dynamic> params = Map<String, dynamic>.from(callInfo.params);
-    dynamic methodHandler = _methodMap[methodName];
-    if (methodHandler is MethodHandlerHaveReturn) {
-      String result = methodHandler(params);
-      ResultInfo ri = ResultInfo();
-      ri.result = result;
-      return ri;
-    } else if (methodHandler is MethodHandlerNoReturn) {
-      ResultInfo ri = ResultInfo();
-      return ri;
-    }
-  }
 }

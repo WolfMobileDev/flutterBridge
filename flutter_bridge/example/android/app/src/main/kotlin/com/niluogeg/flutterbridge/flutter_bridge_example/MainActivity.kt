@@ -16,29 +16,51 @@ class MainActivity : FlutterActivity() {
         super.onCreate(savedInstanceState)
 
 
-        FlutterBridge.instance.registerHandler("getSDKVersion",object : MethodHandlerHaveReturn {
+        FlutterBridge.instance.registerHandler("getSDKVersion", object : MethodHandlerHaveReturn {
             override fun onMethodCall(params: Map<String, Any?>): String {
                 return Build.VERSION.SDK_INT.toString()
             }
         })
 
 
-        FlutterBridge.instance.registerHandler("startEnterActivity",object : MethodHandlerHaveReturn {
-            override fun onMethodCall(params: Map<String, Any?>): String {
-                val pageName = (params.get("pageName") as String?) ?: ""
-                var intent = Intent(applicationContext, Class.forName(pageName))
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                applicationContext.startActivity(intent)
-                return "native 收到 flutter 的调用"
-            }
-        })
+        FlutterBridge.instance.registerHandler("startEnterActivity",
+            object : MethodHandlerHaveReturn {
+                override fun onMethodCall(params: Map<String, Any?>): String {
+                    val pageName = (params.get("pageName") as String?) ?: ""
+                    var intent = Intent(applicationContext, Class.forName(pageName))
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    applicationContext.startActivity(intent)
+                    return "native 收到 flutter 的调用"
+                }
+            })
 
-        FlutterBridge.instance.registerHandler("callNativeNoReturn",object : MethodHandlerNoReturn {
-            override fun onMethodCall(params: Map<String, Any?>) {
-                Log.e("MainActivity","method callNativeNoReturn 被调用了")
-            }
-        })
+        FlutterBridge.instance.registerHandler("callNativeNoReturn",
+            object : MethodHandlerNoReturn {
+                override fun onMethodCall(params: Map<String, Any?>) {
+                    Log.e("MainActivity", "method callNativeNoReturn 被调用了")
+                }
+            })
 
+//
+//        FlutterBridge.instance.registerHandler("requestHttp", object : MethodHandlerHaveReturn {
+//            override fun onMethodCall(params: Map<String, Any?>): String {
+//
+//                Log.e("MainActivity", "requestHttp start")
+//                val result = HttpConnectionUtil().postRequsetAsync(
+//                    "https://bff.eshetang.com/dashboard/appVersion",
+//                    HashMap(),object : HttpConnectionUtil.CallBack{
+//                        override fun onsuccess(result: String?) {
+//
+//
+//                        }
+//
+//                    }
+//                )
+//                Log.e("MainActivity", "requestHttp end result=$result")
+//
+//                return result
+//            }
+//        })
 
     }
 
