@@ -1,26 +1,29 @@
 package com.niluogeg.flutterbridge.flutter_bridge
 
 import android.content.Context
+import android.util.Log
 import androidx.annotation.NonNull
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.plugin.common.MethodCall
+import io.flutter.plugin.common.MethodChannel
 
 /** FlutterBridgePlugin */
-class FlutterBridgePlugin : FlutterPlugin, Message.NativeRouterApi {
-    private lateinit var flutterApi: Message.FlutterRouterApi
+class FlutterBridgePlugin : FlutterPlugin {
+    companion object{
+        const val CHANNEL_NAME = "flutterBridge/core"
+    }
+
     private lateinit var applicationContext: Context
     private lateinit var flutterBridge: FlutterBridge
-    /// The MethodChannel that will the communication between Flutter and native Android
-    ///
-    /// This local reference serves to register the plugin with the Flutter Engine and unregister it
-    /// when the Flutter Engine is detached from the Activity
+
+    private lateinit var channel : MethodChannel
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         applicationContext = flutterPluginBinding.applicationContext
-        flutterApi = Message.FlutterRouterApi(flutterPluginBinding.binaryMessenger)
         flutterBridge = FlutterBridge.instance
-        flutterBridge.flutterApi=flutterApi
-        Message.NativeRouterApi.setup(flutterPluginBinding.binaryMessenger, this)
+        channel = MethodChannel(flutterPluginBinding.binaryMessenger, CHANNEL_NAME)
+        channel.setMethodCallHandler(flutterBridge)
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -28,14 +31,6 @@ class FlutterBridgePlugin : FlutterPlugin, Message.NativeRouterApi {
     }
 
 
-    override fun callNative(callInfo: Message.CallInfo?): Message.ResultInfo {
-        val methodMame = callInfo?.methodName ?: ""
-        val params = (callInfo?.params ?: HashMap<String, Any?>()) as Map<String, Any?>
-        val result = flutterBridge.callNative(methodMame, params)
-        val ri = Message.ResultInfo()
-        ri.result = result
-        return ri
-    }
 
 
 }

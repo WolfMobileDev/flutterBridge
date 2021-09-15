@@ -18,24 +18,24 @@ class EnterActivity : FlutterActivity() {
         val tv = findViewById<TextView>(R.id.tv)
 
         findViewById<View>(R.id.btn).setOnClickListener {
-            FlutterBridge.instance.callFlutter(
-                "getFlutterVersion",
-                callBack = object : HandleCallBackHaveReturn {
-                    override fun callSuccess(result: String) {
-                        tv.text = "FlutterVersion=$result"
-                    }
-                })
+//            FlutterBridge.instance.callFlutter(
+//                "getFlutterVersion",
+//                callBack = object : HandleCallBackHaveReturn {
+//                    override fun callSuccess(result: String) {
+//                        tv.text = "FlutterVersion=$result"
+//                    }
+//                })
 
         }
 
         findViewById<View>(R.id.btn_noreturn).setOnClickListener {
-            FlutterBridge.instance.callFlutter(
-                "callFlutterNoReturn",
-                callBack = object : HandleCallBackNoReturn {
-                    override fun callSuccess() {
-                        tv.text = "callFlutterNoReturn 被调用了"
-                    }
-                })
+//            FlutterBridge.instance.callFlutter(
+//                "callFlutterNoReturn",
+//                callBack = object : HandleCallBackNoReturn {
+//                    override fun callSuccess() {
+//                        tv.text = "callFlutterNoReturn 被调用了"
+//                    }
+//                })
 
         }
     }
