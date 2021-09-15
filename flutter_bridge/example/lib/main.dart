@@ -29,7 +29,7 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  _getVersion(){
+  _getVersion() {
     return "1.0.0";
   }
 
@@ -56,6 +56,12 @@ class _MyAppState extends State<MyApp> {
                 print('sdk version =$result');
               },
               child: Text("getSDKVersion-不带入参"),
+            ),
+            MaterialButton(
+              onPressed: () {
+                FlutterBridge.instance.callNativeNoReturn("callNativeNoReturn");
+              },
+              child: Text("调用没用返回值的方法"),
             ),
           ],
         ),

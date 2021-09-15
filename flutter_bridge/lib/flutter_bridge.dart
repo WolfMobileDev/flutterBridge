@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:flutter/services.dart';
 
@@ -29,6 +30,13 @@ class FlutterBridge extends FlutterRouterApi {
     cp.params = params;
     ResultInfo ri = await NativeRouterApi().callNative(cp);
     return ri.result;
+  }
+
+  callNativeNoReturn(String methodName, {Map<String, Object> params}) async {
+    CallInfo cp = CallInfo();
+    cp.methodName = methodName;
+    cp.params = params;
+    await NativeRouterApi().callNative(cp);
   }
 
   @override

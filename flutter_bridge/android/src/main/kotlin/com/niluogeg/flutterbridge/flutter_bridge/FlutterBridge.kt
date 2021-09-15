@@ -30,7 +30,22 @@ class FlutterBridge private constructor() {
      */
     internal fun callNative(methodName: String, params: Map<String, Any?>): String {
         val methodHandle = methodMap[methodName]
-        return methodHandle?.onMethodCall(params) ?: "can not found target method"
+        return if (methodHandle != null) {
+            when (methodHandle) {
+                is MethodHandlerHaveReturn -> {
+                    methodHandle.onMethodCall(params)
+                }
+                is MethodHandlerNoReturn -> {
+                    methodHandle.onMethodCall(params)
+                    "No Return Method Handler"
+                }
+                else -> {
+                    "illegal MethodHandler"
+                }
+            }
+        } else {
+            "can not found target method"
+        }
     }
 
     /**
