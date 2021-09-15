@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bridge/aa_bb.dart';
 import 'package:flutter_bridge/flutter_bridge.dart';
 
 void main() {
@@ -23,9 +24,8 @@ class _MyAppState extends State<MyApp> {
       return _getVersion();
     });
 
-    FlutterBridge.instance.registerHandler("nativeCallFlutter2", (params) {
-      print('flutter 收到 原生的调用 params${params.toString()}');
-      return "flutter 收到 native 的调用";
+    FlutterBridge.instance.registerHandlerNoReturn("callFlutterNoReturn", (params) {
+      print('callFlutterNoReturn flutter 收到 原生的调用 params${params.toString()}');
     });
   }
 

@@ -17,4 +17,10 @@
         android:text="getFlutterVersion-不带入参"
         android:layout_height="48dp"/>
 
+    <Button
+        android:id="@+id/btn_noreturn"
+        android:layout_width="match_parent"
+        android:text="getFlutterVersion-不带入参"
+        android:layout_height="48dp"/>
+
 </LinearLayout>

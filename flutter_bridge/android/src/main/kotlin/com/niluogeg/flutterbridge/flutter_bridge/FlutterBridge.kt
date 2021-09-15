@@ -63,7 +63,11 @@ class FlutterBridge private constructor() {
         ci.methodName = methodName
         ci.params = params as Map<Any, Any?>
         flutterApi.callFlutter(ci) { reply ->
-            callBack.callSuccess(reply?.result ?: "")
+            if (callBack is HandleCallBackHaveReturn) {
+                callBack.callSuccess(reply?.result ?: "")
+            } else if (callBack is HandleCallBackNoReturn) {
+                callBack.callSuccess()
+            }
         }
     }
 
