@@ -42,16 +42,22 @@ class MainActivity : FlutterActivity() {
 
         FlutterBridge.instance.registerHandler("requestHttp", object :
             MethodHandlerHaveReturnAsync {
-            override fun onMethodCall(params: Map<String, Any?>, result: MethodChannel.Result) {
+            override fun onMethodCall(params: Map<String, Any?>, result: MethodResult) {
 
                 Log.e("MainActivity", "requestHttp start")
-                HttpConnectionUtil().postRequsetAsync(
-                    "https://bff.eshetang.com/dashboard/appVersion",
-                    HashMap()
-                ) { str ->
-                    result.success(str)
-                    Log.e("MainActivity", "requestHttp end result=$str")
-                }
+
+                Thread(Runnable {
+
+                    HttpConnectionUtil().postRequsetAsync(
+                        "https://bff.eshetang.com/dashboard/appVersion",
+                        HashMap()
+                    ) { str ->
+                        Log.e("MainActivity", "currentThrad=${Thread.currentThread().name}")
+                        result.success(str)
+                        Log.e("MainActivity", "requestHttp end result=$str")
+                    }
+                }).start()
+
             }
         })
 

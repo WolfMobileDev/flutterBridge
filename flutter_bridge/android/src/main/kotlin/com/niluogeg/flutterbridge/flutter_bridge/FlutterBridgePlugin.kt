@@ -10,18 +10,19 @@ import io.flutter.plugin.common.MethodChannel
 
 /** FlutterBridgePlugin */
 class FlutterBridgePlugin : FlutterPlugin {
-    companion object{
+    companion object {
         const val CHANNEL_NAME = "flutterBridge/core"
     }
 
     private lateinit var applicationContext: Context
     private lateinit var flutterBridge: FlutterBridge
 
-    private lateinit var channel : MethodChannel
+    private lateinit var channel: MethodChannel
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         applicationContext = flutterPluginBinding.applicationContext
         flutterBridge = FlutterBridge.instance
+        flutterBridge.context = applicationContext
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, CHANNEL_NAME)
         channel.setMethodCallHandler(flutterBridge)
     }
@@ -29,8 +30,6 @@ class FlutterBridgePlugin : FlutterPlugin {
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
 
     }
-
-
 
 
 }

@@ -1,11 +1,13 @@
 package com.niluogeg.flutterbridge.flutter_bridge
 
+import android.content.Context
 import android.util.Log
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
 class FlutterBridge private constructor() : MethodChannel.MethodCallHandler {
 
+    lateinit var context: Context //applicationContext
 
     private val methodList = ArrayList<String>()
     private val methodMap = hashMapOf<String, MethodHandler>()
@@ -41,7 +43,7 @@ class FlutterBridge private constructor() : MethodChannel.MethodCallHandler {
                     result.success("No Return Method Handler")
                 }
                 is MethodHandlerHaveReturnAsync -> {
-                    methodHandle.onMethodCall(params, result)
+                    methodHandle.onMethodCall(params, MethodResult(result))
                 }
                 else -> {
                     result.error(ERROR_CODE_ILLEGAL_METHODHANDLER, "illegal MethodHandler", null)
