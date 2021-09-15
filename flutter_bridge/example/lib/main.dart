@@ -43,12 +43,8 @@ class _MyAppState extends State<MyApp> {
           children: [
             MaterialButton(
               onPressed: () async {
-                // var result = await FlutterBridge.instance.callNativeHaveReturn("startEnterActivity",
-                //     params: {"pageName": "com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"});
-                // print('flutter 调用原生 返回值 cpResult=$result');
-
-                FlutterBridge.instance.getChannel().invokeMethod("startEnterActivity",{"aa" : "bb"});
-
+                var result = await FlutterBridge.instance.getChannel().invokeMethod("startEnterActivity", {"pageName": "com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"});
+                print('flutter 调用原生 返回值 cpResult=$result');
               },
               child: Text("startEnterActivity-带入参"),
             ),
@@ -65,7 +61,6 @@ class _MyAppState extends State<MyApp> {
               },
               child: Text("调用没用返回值的方法"),
             ),
-
             MaterialButton(
               onPressed: () async {
                 // var result = await FlutterBridge.instance.callNativeHaveReturn("requestHttp");

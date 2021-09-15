@@ -9,6 +9,7 @@ class FlutterBridge private constructor() : MethodChannel.MethodCallHandler {
 
     private val methodList = ArrayList<String>()
     private val methodMap = hashMapOf<String, MethodHandler>()
+    private val resultMap = hashMapOf<String, MethodChannel.Result>()
 
 
     companion object {
@@ -23,6 +24,29 @@ class FlutterBridge private constructor() : MethodChannel.MethodCallHandler {
         methodMap[methodName] = methodHandler
     }
 
+
+    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+        Log.e("FlutterBridge", "call=${call.method} arguments=${call.arguments}")
+        val methodName = call.method ?: ""
+        val params = call.arguments as Map<String, Any?>
+        val methodHandle = methodMap[methodName]
+        if (methodHandle != null) {
+            when (methodHandle) {
+                is MethodHandlerHaveReturn -> {
+                    result.success(methodHandle.onMethodCall(params))
+                }
+                is MethodHandlerNoReturn -> {
+                    methodHandle.onMethodCall(params)
+                    result.success("No Return Method Handler")
+                }
+                else -> {
+                    result.error("0001", "illegal MethodHandler", null)
+                }
+            }
+        } else {
+            result.notImplemented()
+        }
+    }
 
 //    /**
 //     * 方法被调用
@@ -73,8 +97,5 @@ class FlutterBridge private constructor() : MethodChannel.MethodCallHandler {
 //        }
 //    }
 
-    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-        Log.e("FlutterBridge", "call=${call.method} arguments=${call.arguments}")
-    }
 
 }
