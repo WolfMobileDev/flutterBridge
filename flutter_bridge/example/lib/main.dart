@@ -20,7 +20,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   _registMethod() {
-    FlutterBridge.instance.registerHandler("getFlutterVersion", (params) {
+    FlutterBridge.instance.registerHandlerHaveReturn("getFlutterVersion", (params) {
       return _getVersion();
     });
 

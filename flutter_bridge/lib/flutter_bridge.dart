@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 
 import 'messages.dart';
 
-typedef MethodHandler = String Function(Map<String, dynamic> params);
+typedef MethodHandlerHaveReturn = String Function(Map<String, dynamic> params);
 typedef MethodHandlerNoReturn = void Function(Map<String, dynamic> params);
 
 class FlutterBridge extends FlutterRouterApi {
@@ -21,7 +21,7 @@ class FlutterBridge extends FlutterRouterApi {
   var _methodMap = Map<String, dynamic>();
 
   /// 注册方法
-  void registerHandler(String methodName, MethodHandler methodHandle) {
+  void registerHandlerHaveReturn(String methodName, MethodHandlerHaveReturn methodHandle) {
     _methodMap[methodName] = methodHandle;
   }
 
@@ -49,7 +49,7 @@ class FlutterBridge extends FlutterRouterApi {
     String methodName = callInfo.methodName;
     Map<String, dynamic> params = Map<String, dynamic>.from(callInfo.params);
     dynamic methodHandler = _methodMap[methodName];
-    if (methodHandler is MethodHandler) {
+    if (methodHandler is MethodHandlerHaveReturn) {
       String result = methodHandler(params);
       ResultInfo ri = ResultInfo();
       ri.result = result;
