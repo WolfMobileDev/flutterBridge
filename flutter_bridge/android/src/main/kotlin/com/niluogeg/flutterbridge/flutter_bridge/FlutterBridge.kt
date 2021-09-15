@@ -14,6 +14,7 @@ class FlutterBridge private constructor() : MethodChannel.MethodCallHandler {
 
     companion object {
         val instance: FlutterBridge by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) { FlutterBridge() }
+        const val ERROR_CODE_ILLEGAL_METHODHANDLER = "0001"
     }
 
 
@@ -28,7 +29,7 @@ class FlutterBridge private constructor() : MethodChannel.MethodCallHandler {
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         Log.e("FlutterBridge", "call=${call.method} arguments=${call.arguments}")
         val methodName = call.method ?: ""
-        val params = call.arguments as Map<String, Any?>
+        val params = if (call.arguments == null) HashMap() else call.arguments as Map<String, Any?>
         val methodHandle = methodMap[methodName]
         if (methodHandle != null) {
             when (methodHandle) {
@@ -39,8 +40,11 @@ class FlutterBridge private constructor() : MethodChannel.MethodCallHandler {
                     methodHandle.onMethodCall(params)
                     result.success("No Return Method Handler")
                 }
+                is MethodHandlerHaveReturnAsync -> {
+                    methodHandle.onMethodCall(params, result)
+                }
                 else -> {
-                    result.error("0001", "illegal MethodHandler", null)
+                    result.error(ERROR_CODE_ILLEGAL_METHODHANDLER, "illegal MethodHandler", null)
                 }
             }
         } else {

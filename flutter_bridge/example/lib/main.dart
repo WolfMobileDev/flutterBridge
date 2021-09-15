@@ -63,8 +63,8 @@ class _MyAppState extends State<MyApp> {
             ),
             MaterialButton(
               onPressed: () async {
-                // var result = await FlutterBridge.instance.callNativeHaveReturn("requestHttp");
-                // print('requestHttp resutl =$result');
+                var result = await FlutterBridge.instance.getChannel().invokeMethod("requestHttp");
+                print('requestHttp resutl =$result');
               },
               child: Text("requestHttp"),
             ),

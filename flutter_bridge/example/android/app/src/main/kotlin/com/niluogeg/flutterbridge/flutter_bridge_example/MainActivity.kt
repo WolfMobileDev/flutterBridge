@@ -4,11 +4,9 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import com.niluogeg.flutterbridge.flutter_bridge.FlutterBridge
-import com.niluogeg.flutterbridge.flutter_bridge.MethodHandler
-import com.niluogeg.flutterbridge.flutter_bridge.MethodHandlerHaveReturn
-import com.niluogeg.flutterbridge.flutter_bridge.MethodHandlerNoReturn
+import com.niluogeg.flutterbridge.flutter_bridge.*
 import io.flutter.embedding.android.FlutterActivity
+import io.flutter.plugin.common.MethodChannel
 
 
 class MainActivity : FlutterActivity() {
@@ -41,26 +39,21 @@ class MainActivity : FlutterActivity() {
                 }
             })
 
-//
-//        FlutterBridge.instance.registerHandler("requestHttp", object : MethodHandlerHaveReturn {
-//            override fun onMethodCall(params: Map<String, Any?>): String {
-//
-//                Log.e("MainActivity", "requestHttp start")
-//                val result = HttpConnectionUtil().postRequsetAsync(
-//                    "https://bff.eshetang.com/dashboard/appVersion",
-//                    HashMap(),object : HttpConnectionUtil.CallBack{
-//                        override fun onsuccess(result: String?) {
-//
-//
-//                        }
-//
-//                    }
-//                )
-//                Log.e("MainActivity", "requestHttp end result=$result")
-//
-//                return result
-//            }
-//        })
+
+        FlutterBridge.instance.registerHandler("requestHttp", object :
+            MethodHandlerHaveReturnAsync {
+            override fun onMethodCall(params: Map<String, Any?>, result: MethodChannel.Result) {
+
+                Log.e("MainActivity", "requestHttp start")
+                HttpConnectionUtil().postRequsetAsync(
+                    "https://bff.eshetang.com/dashboard/appVersion",
+                    HashMap()
+                ) { str ->
+                    result.success(str)
+                    Log.e("MainActivity", "requestHttp end result=$str")
+                }
+            }
+        })
 
     }
 
