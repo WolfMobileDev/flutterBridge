@@ -19,13 +19,17 @@ class _MyAppState extends State<MyApp> {
   }
 
   _registMethod() {
-    // FlutterBridge.instance.registerHandlerHaveReturn("getFlutterVersion", (params) {
-    //   return _getVersion();
-    // });
-    //
-    // FlutterBridge.instance.registerHandlerNoReturn("callFlutterNoReturn", (params) {
-    //   print('callFlutterNoReturn flutter 收到 原生的调用 params${params.toString()}');
-    // });
+    FlutterBridge.instance.registerHandler("getFlutterVersion", (params) {
+      return _getVersion();
+    });
+
+    FlutterBridge.instance.registerHandler("getFlutterMap", (params) {
+      return {"aa": "bb", "cc": "dd"};
+    });
+
+    FlutterBridge.instance.registerHandler("callFlutterNoReturn", (params) {
+      print('callFlutterNoReturn flutter 收到 原生的调用 params${params.toString()}');
+    });
   }
 
   _getVersion() {
@@ -45,7 +49,7 @@ class _MyAppState extends State<MyApp> {
               onPressed: () async {
                 var result = await FlutterBridge.instance.callNative<Map>("startEnterActivity",
                     params: {"pageName": "com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"});
-                print('flutter 调用原生 返回值 cpResult=$result aa=${result["aa"]}' );
+                print('flutter 调用原生 返回值 cpResult=$result aa=${result["aa"]}');
               },
               child: Text("startEnterActivity-带入参-返回值是map"),
             ),

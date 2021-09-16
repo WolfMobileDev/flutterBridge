@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:flutter/services.dart';
 
-typedef MethodHandlerHaveReturn = String Function(Map<String, dynamic> params);
-typedef MethodHandlerNoReturn = void Function(Map<String, dynamic> params);
+typedef MethodHandler = dynamic Function(Map<String, dynamic> params);
 
 class FlutterBridge {
   static const String CHANNEL_NAME = "flutterBridge/core";
@@ -23,55 +23,31 @@ class FlutterBridge {
     return _channel;
   }
 
-  var _methodMap = Map<String, dynamic>();
+  var _methodMap = HashMap<String, MethodHandler>();
 
   Future<T> callNative<T>(String methodName, {Map<String, Object> params}) async {
     return await _channel.invokeMethod(methodName, params);
   }
 
-  Future<dynamic> onMethodCall(MethodCall call) {
-    print('method=${call.method} arguments=${call.arguments}');
-    return Future.value("");
+  // 注册方法
+  void registerHandler(String methodName, MethodHandler methodHandle) {
+    _methodMap[methodName] = methodHandle;
   }
 
-// @override
-// ResultInfo callFlutter(CallInfo callInfo) {
-//   String methodName = callInfo.methodName;
-//   Map<String, dynamic> params = Map<String, dynamic>.from(callInfo.params);
-//   dynamic methodHandler = _methodMap[methodName];
-//   if (methodHandler is MethodHandlerHaveReturn) {
-//     String result = methodHandler(params);
-//     ResultInfo ri = ResultInfo();
-//     ri.result = result;
-//     return ri;
-//   } else if (methodHandler is MethodHandlerNoReturn) {
-//     ResultInfo ri = ResultInfo();
-//     return ri;
-//   }
-// }
+  // 反注册方法
+  MethodHandler unregisterHandler(String methodName) {
+    return _methodMap.remove(methodName);
+  }
 
-// /// 注册方法
-// void registerHandlerHaveReturn(String methodName, MethodHandlerHaveReturn methodHandle) {
-//   _methodMap[methodName] = methodHandle;
-// }
-//
-// void registerHandlerNoReturn(String methodName, MethodHandlerNoReturn methodHandle) {
-//   _methodMap[methodName] = methodHandle;
-// }
-//
-// Future<String> callNativeHaveReturn(String methodName, {Map<String, Object> params}) async {
-//   CallInfo cp = CallInfo();
-//   cp.methodName = methodName;
-//   cp.params = params;
-//   ResultInfo ri = await NativeRouterApi().callNative(cp);
-//   return ri.result;
-// }
-//
-// callNativeNoReturn(String methodName, {Map<String, Object> params}) async {
-//   CallInfo cp = CallInfo();
-//   cp.methodName = methodName;
-//   cp.params = params;
-//   await NativeRouterApi().callNative(cp);
-// }
-
+  Future<dynamic> onMethodCall(MethodCall call) async {
+    print('method=${call.method} arguments=${call.arguments}');
+    String methodName = call.method;
+    Map<String, dynamic> params = Map<String, dynamic>.from(call.arguments);
+    MethodHandler methodHandler = _methodMap[methodName];
+    if (methodHandler != null) {
+      return methodHandler(params);
+    } else {
+      return "methodNotImplemented"; //方法没实现
+    }
+  }
 }

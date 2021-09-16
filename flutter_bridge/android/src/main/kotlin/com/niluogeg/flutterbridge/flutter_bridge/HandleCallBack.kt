@@ -1,20 +1,23 @@
 package com.niluogeg.flutterbridge.flutter_bridge
 
-interface HandleCallBack {
-}
-
-interface HandleCallBackHaveReturn : HandleCallBack {
-    fun callSuccess(result: String)
-}
-
-interface HandleCallBackNoReturn : HandleCallBack {
-    fun callSuccess()
-}
+import android.widget.Toast
 
 
-class DefaultHandleCallBack : HandleCallBackNoReturn {
-    override fun callSuccess() {
+interface HandleCallBack<R> {
+    fun callSuccess(result: R?)
+    fun callError(errorMessage: String = "", errorCode: String = "", errorDetails: Any = "") {
 
     }
+
+    fun notImplemented() {
+        Toast.makeText(FlutterBridge.instance.context, "flutter没有找到对应方法", Toast.LENGTH_LONG).show()
+    }
+}
+
+
+class DefaultHandleCallBack<R> : HandleCallBack<R> {
+    override fun callSuccess(result: R?) {
+    }
+
 
 }

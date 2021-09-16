@@ -2,20 +2,28 @@ package com.niluogeg.flutterbridge.flutter_bridge
 
 import android.content.Context
 import android.util.Log
+import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
 class FlutterBridge private constructor() : MethodChannel.MethodCallHandler {
 
     lateinit var context: Context //applicationContext
+    lateinit var channel: MethodChannel
 
     private val methodMap = hashMapOf<String, MethodHandler>()
 
 
     companion object {
         val instance: FlutterBridge by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) { FlutterBridge() }
+        const val CHANNEL_NAME = "flutterBridge/core"
         const val ERROR_CODE_ILLEGAL_METHODHANDLER = "0001"
         const val ERROR_CODE_ERROR = "0002" // 调用报错
+    }
+
+    fun initChannel(messenger: BinaryMessenger) {
+        channel = MethodChannel(messenger, CHANNEL_NAME)
+        channel.setMethodCallHandler(this)
     }
 
 
@@ -31,6 +39,29 @@ class FlutterBridge private constructor() : MethodChannel.MethodCallHandler {
      */
     fun unRegisterHandler(methodName: String): MethodHandler? {
         return methodMap.remove(methodName)
+    }
+
+
+    /**
+     * 调用flutter方法
+     * @methodName: 方法名
+     * @param:方法入参
+     * @return : 方法返回
+     */
+    fun <R> callFlutter(
+        methodName: String,
+        params: Map<String, Any?> = HashMap(),
+        callBack: HandleCallBack<R> = DefaultHandleCallBack<R>()
+    ) {
+        channel.invokeMethod(methodName, params, object : CallFlutterResult {
+            override fun success(result: Any?) {
+                if (result is String && result == "methodNotImplemented") {
+                    callBack.notImplemented()//自己实现 notImplemented
+                } else {
+                    callBack.callSuccess(result as R?)
+                }
+            }
+        })
     }
 
 
