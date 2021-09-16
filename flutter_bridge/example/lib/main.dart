@@ -36,42 +36,55 @@ class _MyAppState extends State<MyApp> {
     return "1.0.0";
   }
 
+  String result = "";
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: Text('result=$result'),
         ),
         body: Column(
           children: [
             MaterialButton(
               onPressed: () async {
-                var result = await FlutterBridge.instance.callNative<Map>("startEnterActivity",
+                await FlutterBridge.instance.callNative<Map>("startEnterActivity",
                     params: {"pageName": "com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"});
-                print('flutter 调用原生 返回值 cpResult=$result aa=${result["aa"]}');
               },
-              child: Text("startEnterActivity-带入参-返回值是map"),
+              child: Text("打开原生页面"),
             ),
             MaterialButton(
               onPressed: () async {
-                String result = await FlutterBridge.instance.callNative<String>("getSDKVersion");
-                print('sdk version =$result');
+                var map = await FlutterBridge.instance.callNative<Map>("callNativeReturnMap",
+                    params: {"pageName": "com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"});
+                result = map.toString();
+                setState(() {});
               },
-              child: Text("getSDKVersion-不带入参-返回值是String"),
+              child: Text("调用原生方法-带入参-返回值是map"),
+            ),
+            MaterialButton(
+              onPressed: () async {
+                String str = await FlutterBridge.instance.callNative<String>("getSDKVersion");
+                result = str;
+                setState(() {});
+              },
+              child: Text("调用原生方法-不带入参-返回值是String"),
             ),
             MaterialButton(
               onPressed: () {
                 FlutterBridge.instance.callNative("callNativeNoReturn");
+                result = "没有返回值";
+                setState(() {});
               },
-              child: Text("调用没用返回值的方法"),
+              child: Text("调用原生方法-没有返回值"),
             ),
             MaterialButton(
               onPressed: () async {
-                var result = await FlutterBridge.instance.getChannel().invokeMethod("requestHttp");
-                print('requestHttp resutl =$result');
+                result = await FlutterBridge.instance.getChannel().invokeMethod("requestHttp");
+                setState(() {});
               },
-              child: Text("requestHttp"),
+              child: Text("调用原生方法-异步"),
             ),
           ],
         ),

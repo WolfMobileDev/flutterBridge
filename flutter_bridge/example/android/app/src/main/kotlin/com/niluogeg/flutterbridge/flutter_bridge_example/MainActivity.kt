@@ -14,13 +14,6 @@ class MainActivity : FlutterActivity() {
         super.onCreate(savedInstanceState)
 
 
-        FlutterBridge.instance.registerHandler(
-            "getSDKVersion",
-            object : MethodHandlerHaveReturn<String> {
-                override fun onMethodCall(params: Map<String, Any?>): String {
-                    return Build.VERSION.SDK_INT.toString()
-                }
-            })
 
 
         FlutterBridge.instance.registerHandler("startEnterActivity",
@@ -33,6 +26,22 @@ class MainActivity : FlutterActivity() {
                     return hashMapOf("aa" to "bb", "cc" to "dd")
                 }
             })
+
+        FlutterBridge.instance.registerHandler("callNativeReturnMap",
+            object : MethodHandlerHaveReturn<Map<String, String>> {
+                override fun onMethodCall(params: Map<String, Any?>): Map<String, String> {
+                    return hashMapOf("aa" to "bb", "cc" to "dd")
+                }
+            })
+
+        FlutterBridge.instance.registerHandler(
+            "getSDKVersion",
+            object : MethodHandlerHaveReturn<String> {
+                override fun onMethodCall(params: Map<String, Any?>): String {
+                    return Build.VERSION.SDK_INT.toString()
+                }
+            })
+
 
         FlutterBridge.instance.registerHandler("callNativeNoReturn",
             object : MethodHandlerNoReturn {
