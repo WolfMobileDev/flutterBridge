@@ -8,8 +8,8 @@ interface MethodHandlerHaveReturnAsync : MethodHandler {
     fun onMethodCall(params: Map<String, Any?>,result:MethodResult)
 }
 
-interface MethodHandlerHaveReturn : MethodHandler {
-    fun onMethodCall(params: Map<String, Any?>): String
+interface MethodHandlerHaveReturn<R> : MethodHandler {
+    fun onMethodCall(params: Map<String, Any?>): R
 }
 
 interface MethodHandlerNoReturn : MethodHandler {

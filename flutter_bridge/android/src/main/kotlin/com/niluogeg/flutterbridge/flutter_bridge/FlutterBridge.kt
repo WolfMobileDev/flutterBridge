@@ -44,7 +44,7 @@ class FlutterBridge private constructor() : MethodChannel.MethodCallHandler {
             val methodHandle = methodMap[methodName]
             if (methodHandle != null) {
                 when (methodHandle) {
-                    is MethodHandlerHaveReturn -> {
+                    is MethodHandlerHaveReturn<*> -> {
                         result.success(methodHandle.onMethodCall(params))
                     }
                     is MethodHandlerNoReturn -> {

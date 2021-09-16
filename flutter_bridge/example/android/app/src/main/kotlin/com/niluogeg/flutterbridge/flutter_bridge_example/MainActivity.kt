@@ -14,21 +14,23 @@ class MainActivity : FlutterActivity() {
         super.onCreate(savedInstanceState)
 
 
-        FlutterBridge.instance.registerHandler("getSDKVersion", object : MethodHandlerHaveReturn {
-            override fun onMethodCall(params: Map<String, Any?>): String {
-                return Build.VERSION.SDK_INT.toString()
-            }
-        })
+        FlutterBridge.instance.registerHandler(
+            "getSDKVersion",
+            object : MethodHandlerHaveReturn<String> {
+                override fun onMethodCall(params: Map<String, Any?>): String {
+                    return Build.VERSION.SDK_INT.toString()
+                }
+            })
 
 
         FlutterBridge.instance.registerHandler("startEnterActivity",
-            object : MethodHandlerHaveReturn {
-                override fun onMethodCall(params: Map<String, Any?>): String {
+            object : MethodHandlerHaveReturn<Map<String, String>> {
+                override fun onMethodCall(params: Map<String, Any?>): Map<String, String> {
                     val pageName = (params.get("pageName") as String?) ?: ""
                     var intent = Intent(applicationContext, Class.forName(pageName))
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     applicationContext.startActivity(intent)
-                    return "native 收到 flutter 的调用"
+                    return hashMapOf("aa" to "bb", "cc" to "dd")
                 }
             })
 

@@ -43,18 +43,18 @@ class _MyAppState extends State<MyApp> {
           children: [
             MaterialButton(
               onPressed: () async {
-                var result = await FlutterBridge.instance.callNative("startEnterActivity",
+                var result = await FlutterBridge.instance.callNative<Map>("startEnterActivity",
                     params: {"pageName": "com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"});
-                print('flutter 调用原生 返回值 cpResult=$result');
+                print('flutter 调用原生 返回值 cpResult=$result aa=${result["aa"]}' );
               },
-              child: Text("startEnterActivity-带入参"),
+              child: Text("startEnterActivity-带入参-返回值是map"),
             ),
             MaterialButton(
               onPressed: () async {
-                var result = await FlutterBridge.instance.callNative("getSDKVersion");
+                String result = await FlutterBridge.instance.callNative<String>("getSDKVersion");
                 print('sdk version =$result');
               },
-              child: Text("getSDKVersion-不带入参"),
+              child: Text("getSDKVersion-不带入参-返回值是String"),
             ),
             MaterialButton(
               onPressed: () {
