@@ -67,7 +67,7 @@ class FlutterBridge private constructor() : MethodChannel.MethodCallHandler {
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         try {
-            Log.e("FlutterBridge", "call=${call.method} arguments=${call.arguments}")
+            L.log("flutter call native  method=${call.method} arguments=${call.arguments}")
             val methodName = call.method ?: ""
             val params =
                 if (call.arguments == null) HashMap()

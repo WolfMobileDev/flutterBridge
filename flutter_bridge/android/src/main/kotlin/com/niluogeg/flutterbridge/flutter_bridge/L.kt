@@ -4,10 +4,11 @@ import android.util.Log
 
 object L {
 
-    var switch = false
+    var toggle = false
 
     fun log(msg: String) {
-        Log.d("flutterBridge", msg)
+        if (toggle)
+            Log.d("flutterBridge", msg)
     }
 
 }

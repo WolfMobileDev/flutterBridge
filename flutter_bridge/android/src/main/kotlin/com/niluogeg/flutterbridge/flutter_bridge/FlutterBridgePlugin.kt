@@ -20,6 +20,13 @@ class FlutterBridgePlugin : FlutterPlugin {
         flutterBridge = FlutterBridge.instance
         flutterBridge.context = applicationContext
         flutterBridge.initChannel(flutterPluginBinding.binaryMessenger)
+
+        flutterBridge.registerHandler("toggleLog", object : MethodHandlerNoReturn {
+            override fun onMethodCall(params: Map<String, Any?>) {
+                L.toggle = params["toggle"] as Boolean
+            }
+
+        })
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {

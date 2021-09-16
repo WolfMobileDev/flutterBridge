@@ -3,6 +3,8 @@ import 'dart:collection';
 
 import 'package:flutter/services.dart';
 
+import 'l.dart';
+
 typedef MethodHandler = dynamic Function(Map<String, dynamic> params);
 
 class FlutterBridge {
@@ -17,6 +19,11 @@ class FlutterBridge {
 
   static FlutterBridge get instance {
     return _instance;
+  }
+
+  openLog(bool open) {
+    L.toggle = open;
+    callNative("toggleLog", params: {"toggle": open});
   }
 
   MethodChannel getChannel() {
@@ -40,7 +47,7 @@ class FlutterBridge {
   }
 
   Future<dynamic> onMethodCall(MethodCall call) async {
-    print('method=${call.method} arguments=${call.arguments}');
+    L.log('method=${call.method} arguments=${call.arguments}');
     String methodName = call.method;
     Map<String, dynamic> params = Map<String, dynamic>.from(call.arguments);
     MethodHandler methodHandler = _methodMap[methodName];
