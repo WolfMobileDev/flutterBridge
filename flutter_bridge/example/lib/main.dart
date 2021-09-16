@@ -21,15 +21,23 @@ class _MyAppState extends State<MyApp> {
 
   _registMethod() {
     FlutterBridge.instance.registerHandler("getFlutterVersion", (params) {
+      print('getFlutterVersion ${params.toString()}');
       return _getVersion();
     });
 
     FlutterBridge.instance.registerHandler("getFlutterMap", (params) {
-      return {"aa": "bb", "cc": "dd"};
+      print('getFlutterMap ${params.toString()}');
+      return {
+        "aa": "bb",
+        "cc": 1,
+        "dd": [1, 2, 3],
+        "ee": true
+      };
     });
 
     FlutterBridge.instance.registerHandler("callFlutterNoReturn", (params) {
-      print('callFlutterNoReturn flutter 收到 原生的调用 params${params.toString()}');
+      print('callFlutterNoReturn ${params.toString()}');
+
     });
   }
 
@@ -44,10 +52,12 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('result=$result'),
+          title: Text('flutterBridge'),
         ),
         body: Column(
           children: [
+
+            Text('result=$result'),
             MaterialButton(
               onPressed: () async {
                 await FlutterBridge.instance.callNative<Map>("startEnterActivity",
@@ -57,8 +67,12 @@ class _MyAppState extends State<MyApp> {
             ),
             MaterialButton(
               onPressed: () async {
-                var map = await FlutterBridge.instance.callNative<Map>("callNativeReturnMap",
-                    params: {"pageName": "com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"});
+                var map = await FlutterBridge.instance.callNative<Map>("callNativeReturnMap", params: {
+                  "aa": "bb",
+                  "cc": 1,
+                  "dd": [1, 2, 3],
+                  "ee": true
+                });
                 result = map.toString();
                 setState(() {});
               },

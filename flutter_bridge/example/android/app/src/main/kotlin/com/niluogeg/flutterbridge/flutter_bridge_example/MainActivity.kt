@@ -28,9 +28,17 @@ class MainActivity : FlutterActivity() {
             })
 
         FlutterBridge.instance.registerHandler("callNativeReturnMap",
-            object : MethodHandlerHaveReturn<Map<String, String>> {
-                override fun onMethodCall(params: Map<String, Any?>): Map<String, String> {
-                    return hashMapOf("aa" to "bb", "cc" to "dd")
+            object : MethodHandlerHaveReturn<Map<String, Any>> {
+                override fun onMethodCall(params: Map<String, Any?>): Map<String, Any> {
+
+                    Log.e("flutterBridge","callNativeReturnMap params =${params.toString()}")
+
+                    return hashMapOf(
+                        "aa" to "bb",
+                        "cc" to 1,
+                        "dd" to arrayListOf(1, 2, 3),
+                        "ee" to true
+                    )
                 }
             })
 

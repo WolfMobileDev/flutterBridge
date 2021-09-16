@@ -32,7 +32,10 @@ class EnterActivity : FlutterActivity() {
         findViewById<View>(R.id.btn_map).setOnClickListener {
             FlutterBridge.instance.callFlutter(
                 "getFlutterMap",
-                params = hashMapOf("aa" to "bb"),
+                params = hashMapOf(  "aa" to "bb",
+                    "cc" to 1,
+                    "dd" to arrayListOf(1, 2, 3),
+                    "ee" to true),
                 callBack = object : HandleCallBack<Map<String, Any?>> {
                     override fun callSuccess(result: Map<String, Any?>?) {
                         tv.text = "调用flutter方法-带入参-返回Map result=${result.toString()}"
@@ -45,7 +48,12 @@ class EnterActivity : FlutterActivity() {
         findViewById<View>(R.id.btn_noreturn).setOnClickListener {
             FlutterBridge.instance.callFlutter(
                 "callFlutterNoReturn",
-                params = hashMapOf("aa" to "bb"),
+                params = hashMapOf(
+                    "aa" to "bb",
+                    "cc" to 1,
+                    "dd" to arrayListOf(1, 2, 3),
+                    "ee" to true
+                ),
                 callBack = object : HandleCallBackNoReturn {
                     override fun callSuccess() {
                         tv.text = "调用flutter方法-带入参-无返回值"
