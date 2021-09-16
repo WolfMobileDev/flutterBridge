@@ -22,7 +22,7 @@ class EnterActivity : FlutterActivity() {
                 "getFlutterVersion",
                 callBack = object : HandleCallBack<String> {
                     override fun callSuccess(result: String?) {
-                        tv.text = "FlutterVersion=$result"
+                        tv.text = "调用flutter方法-不带入参-返回String  result=$result"
                     }
 
                 })
@@ -35,7 +35,7 @@ class EnterActivity : FlutterActivity() {
                 params = hashMapOf("aa" to "bb"),
                 callBack = object : HandleCallBack<Map<String, Any?>> {
                     override fun callSuccess(result: Map<String, Any?>?) {
-                        tv.text = "getFlutterMap 被调用了 result=${result.toString()}"
+                        tv.text = "调用flutter方法-带入参-返回Map result=${result.toString()}"
                     }
 
                 })
@@ -46,10 +46,9 @@ class EnterActivity : FlutterActivity() {
             FlutterBridge.instance.callFlutter(
                 "callFlutterNoReturn",
                 params = hashMapOf("aa" to "bb"),
-                callBack = object : HandleCallBack<Void> {
-                    override fun callSuccess(result: Void?) {
-
-                        tv.text = "callFlutterNoReturn 被调用了 result=${result?.toString()}"
+                callBack = object : HandleCallBackNoReturn {
+                    override fun callSuccess() {
+                        tv.text = "调用flutter方法-带入参-无返回值"
                     }
 
 
@@ -63,37 +62,13 @@ class EnterActivity : FlutterActivity() {
                 params = hashMapOf("aa" to "bb"),
                 callBack = object : HandleCallBack<Map<String, Any?>> {
                     override fun callSuccess(result: Map<String, Any?>?) {
-                        tv.text = "callFlutterNoReturn 被调用了 result=${result.toString()}"
+                        tv.text = "调用flutter方法-没有实现的情况 result=${result.toString()}"
                     }
 
                 })
 
         }
 
-
-        findViewById<View>(R.id.btn_testError).setOnClickListener {
-            FlutterBridge.instance.callFlutter(
-                "testError",
-                callBack = object : HandleCallBack<Any> {
-                    override fun callSuccess(result: Any?) {
-                        tv.text = "testError 被调用了 result=${result?.toString()}"
-                    }
-
-                })
-
-        }
-
-        findViewById<View>(R.id.btn_testError2).setOnClickListener {
-            FlutterBridge.instance.callFlutter(
-                "testError2",
-                callBack = object : HandleCallBack<Any> {
-                    override fun callSuccess(result: Any?) {
-                        tv.text = "testError2 被调用了 result=${result?.toString()}"
-                    }
-
-                })
-
-        }
     }
 
 }

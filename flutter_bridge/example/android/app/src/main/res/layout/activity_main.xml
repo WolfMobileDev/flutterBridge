@@ -14,19 +14,19 @@
     <Button
         android:id="@+id/btn"
         android:layout_width="match_parent"
-        android:text="getFlutterVersion-不带入参-返回String"
+        android:text="调用flutter方法-不带入参-返回String"
         android:layout_height="48dp"/>
 
     <Button
         android:id="@+id/btn_map"
         android:layout_width="match_parent"
-        android:text="callFlutterNoReturn-带入参-返回Map"
+        android:text="调用flutter方法-带入参-返回Map"
         android:layout_height="48dp"/>
 
     <Button
         android:id="@+id/btn_noreturn"
         android:layout_width="match_parent"
-        android:text="callFlutterNoReturn-带入参"
+        android:text="调用flutter方法-带入参-无返回值"
         android:layout_height="48dp"/>
 
 
@@ -34,19 +34,8 @@
     <Button
         android:id="@+id/btn_notImplemented"
         android:layout_width="match_parent"
-        android:text="method notImplemented"
+        android:text="调用flutter方法-没有实现的情况"
         android:layout_height="48dp"/>
 
-    <Button
-        android:id="@+id/btn_testError"
-        android:layout_width="match_parent"
-        android:text="testError"
-        android:layout_height="48dp"/>
-
-    <Button
-        android:id="@+id/btn_testError2"
-        android:layout_width="match_parent"
-        android:text="testError2"
-        android:layout_height="48dp"/>
 
 </LinearLayout>
