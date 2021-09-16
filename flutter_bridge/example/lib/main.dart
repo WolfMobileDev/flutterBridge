@@ -43,21 +43,22 @@ class _MyAppState extends State<MyApp> {
           children: [
             MaterialButton(
               onPressed: () async {
-                var result = await FlutterBridge.instance.getChannel().invokeMethod("startEnterActivity", {"pageName": "com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"});
+                var result = await FlutterBridge.instance.callNative("startEnterActivity",
+                    params: {"pageName": "com.niluogeg.flutterbridge.flutter_bridge_example.EnterActivity"});
                 print('flutter 调用原生 返回值 cpResult=$result');
               },
               child: Text("startEnterActivity-带入参"),
             ),
             MaterialButton(
               onPressed: () async {
-                // var result = await FlutterBridge.instance.callNativeHaveReturn("getSDKVersion");
-                // print('sdk version =$result');
+                var result = await FlutterBridge.instance.callNative("getSDKVersion");
+                print('sdk version =$result');
               },
               child: Text("getSDKVersion-不带入参"),
             ),
             MaterialButton(
               onPressed: () {
-                // FlutterBridge.instance.callNativeNoReturn("callNativeNoReturn");
+                FlutterBridge.instance.callNative("callNativeNoReturn");
               },
               child: Text("调用没用返回值的方法"),
             ),
