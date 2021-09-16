@@ -21,6 +21,10 @@ class FlutterBridge {
     return _instance;
   }
 
+  init(){
+
+  }
+
   openLog(bool open) {
     L.toggle = open;
     callNative("toggleLog", params: {"toggle": open});
