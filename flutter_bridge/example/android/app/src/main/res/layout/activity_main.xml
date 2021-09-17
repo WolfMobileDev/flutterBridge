@@ -38,4 +38,11 @@
         android:layout_height="48dp"/>
 
 
+    <Button
+        android:id="@+id/btn_not_main_thread"
+        android:layout_width="match_parent"
+        android:text="调用flutter方法-非主线程"
+        android:layout_height="48dp"/>
+
+
 </LinearLayout>

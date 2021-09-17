@@ -53,6 +53,22 @@ class FlutterBridge private constructor() : MethodChannel.MethodCallHandler {
         params: Map<String, Any?> = HashMap(),
         callBack: HandleCallBack<R> = DefaultHandleCallBack<R>()
     ) {
+
+        if (HandlerUtils.isMainThread()) {
+            callFlutterInner(methodName, params, callBack)
+        } else {
+            HandlerUtils.getMainHandler().post {
+                callFlutterInner(methodName, params, callBack)
+            }
+        }
+
+    }
+
+    private fun <R> callFlutterInner(
+        methodName: String,
+        params: Map<String, Any?> = HashMap(),
+        callBack: HandleCallBack<R> = DefaultHandleCallBack<R>()
+    ) {
         channel.invokeMethod(methodName, params, object : CallFlutterResult {
             override fun success(result: Any?) {
                 if (result is String && result == "methodNotImplemented") {
