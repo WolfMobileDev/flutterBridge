@@ -3,7 +3,7 @@
 # Run `pod lib lint flutter_bridge.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'flutter_bridge_new'
+  s.name             = 'flutter_bridge'
   s.version          = '0.0.1'
   s.summary          = 'A new Flutter project.'
   s.description      = <<-DESC
